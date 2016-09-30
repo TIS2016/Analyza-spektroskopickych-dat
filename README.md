@@ -1,0 +1,2 @@
+# Analyza-spektroskopickych-dat
+Aplikovanci
