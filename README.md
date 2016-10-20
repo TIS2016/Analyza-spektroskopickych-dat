@@ -2,6 +2,8 @@
 
 Názov skupiny: **Aplikovanci**
 
+#### Ak commitujete - prečítajte si najprv našu [commit guide.](https://github.com/TIS2016/Analyza-spektroskopickych-dat/blob/commit-guide/docs/commit-guide.md)
+
 #### Rozdelenie rolí v skupine:
 
 - manažment dokumentácie: **Tomáš Bakoš**
@@ -9,4 +11,4 @@ Názov skupiny: **Aplikovanci**
 - manažment práce: **Martin Šomodi**
 - manažment komunikácie: **Ondrej Husár**
 
-[Čo táto rola pre znamena?](http://dai.fmph.uniba.sk/courses/tvorbaIS/o_projektoch.html "see section: Režim")
+[Čo táto rola pre mňa znamena?](http://dai.fmph.uniba.sk/courses/tvorbaIS/o_projektoch.html "see section: Režim")
