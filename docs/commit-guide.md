@@ -51,23 +51,24 @@ Example of commit message:
 ```
 [topic] summarize changes in 50 chars or  less
 
++ buffer utility class (eg. new implemented functionality, bug fix, etc.)
+- removed feature X (eg. serializing data, etc.)
+
 More detailed explanatory text, if necessary. Wrap it to about 72
-characters or so. In some contexts, the first line is treated as the
-subject of the commit and the rest of the text as the body. 
-
-Explain the problem that this commit is solving. Focus on why you
-are making this change as opposed to how (the code explains that).
-Are there side effects or other unintuitive consequences of this
-change? Here is the place to explain them.
-
- - Bullet points are okay, too
+characters or so.
 
 See: #6
 ```
 
 ---
 
-Tell me your suggestions, or if you agreee. Once we merge this into master, we will consider it as our go to source when commiting.
+Explain the problem that the commit is solving. Focus on why you
+are making this change as opposed to how (the code explains that).
+Are there side effects or other unintuitive consequences of this
+change?
+
+
+Tell me your suggestions, or if you agree. Once we merge this into master, we will consider it as our go to source when commiting.
 
 Sources used:
 [Chris Beams - Git Commit](http://chris.beams.io/posts/git-commit/)
