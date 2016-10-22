@@ -1,5 +1,11 @@
 # Zápisnica z 3. stretnutia so zadávateľom
 
+### Dátum
+17.10.2016
+
+### Prítomný
+Tomáš Bakoš, Martin Šomodi, Ondrej Husár, Filip Kováč
+
 ### Cieľ stretnutia
 Cieľom bolo zoznámiť sa s pripraveným testovacím rozhraním v LabView a následné otestovanie funkčnosti na našich device-och.
 
