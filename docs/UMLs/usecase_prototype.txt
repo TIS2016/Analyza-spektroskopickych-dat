@@ -1,0 +1,20 @@
+@startuml
+:Physicist: as user
+ (Fill in input data) as (input)
+ (Fill in parameters) as (include1)
+ (Fill in spectrum) as (include2)
+
+ 
+ note "include" as N
+ note "include" as N2
+ note bottom of (include1): strings, values, func. names, ...
+ note bottom of (include2): X,Y,Z
+ 
+
+ 
+ user ---> (input)
+ (input) --- N
+ N --- (include1)
+ (input) --- N2
+ N2 --- (include2)
+@enduml
