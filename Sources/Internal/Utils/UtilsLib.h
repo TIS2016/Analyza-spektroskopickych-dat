@@ -6,6 +6,6 @@
 //  Copyright © 2016 Filip Kovac. All rights reserved.
 //
 
-#include "stdafx.h"
 #include "Buffer.h"
-#include "Macros.h"
+#include "StringUtils.h"
+#include "DebugLogger.h"

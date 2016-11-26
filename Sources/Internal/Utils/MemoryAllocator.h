@@ -16,7 +16,7 @@ namespace Internal {
 #undef new
 #undef delete
 
-template < class T > class MemoryAllocatorImplementation {
+template < typename T > class MemoryAllocatorImplementation {
 private:
 	struct AllocationHelper {
 		T o;
@@ -44,26 +44,25 @@ private:
 	
 public:
 	
-	T* Allocate ( size_t size )
+	static T* Allocate ( size_t size )
 	{
 		return (T*)(new AllocationHelper[size]);
 	};
 	
-	T* AllocateItem( size_t size )
+	static T* AllocateItem( size_t size )
 	{
 		return (T*)(new AllocationHelper(size));
 	}
 	
-	void Release( T* buffer )
+	static void Release( T* buffer )
 	{
 		delete[] (AllocationHelper *)(buffer);
 	}
 	
-	void ReleaseItem( T* pItem )
+	static void ReleaseItem( T* pItem )
 	{
 		delete (AllocationHelper *)(pItem);
 	}
-	
 	
 };
 
@@ -72,4 +71,4 @@ public:
 	
 }
 
-template < class T > class MemoryAllocator: public Internal::MemoryAllocatorImplementation< T > {};
+template < typename T > class MemoryAllocator: public Internal::MemoryAllocatorImplementation< T > {};

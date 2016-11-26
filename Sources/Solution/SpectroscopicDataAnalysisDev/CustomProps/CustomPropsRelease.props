@@ -24,7 +24,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <OpenMPSupport>true</OpenMPSupport>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAs>CompileAsCpp</CompileAs>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>

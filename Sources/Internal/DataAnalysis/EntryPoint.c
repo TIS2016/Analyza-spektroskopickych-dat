@@ -1,92 +1,34 @@
-/* Call Library source file */
-
 #include "stdafx.h"
-/* lv_prolog.h and lv_epilog.h set up the correct alignment for LabVIEW data. */
-#include "../../External/cintools/lv_prolog.h"
+#include "EntryPoint.h"
 
-/* Typedefs */
+extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, TDFast *DataOUT_F, TD10 *Error) {
+	int parameterCount = 0;
+	{
+		DebugLogger logger("F:\\School\\3.rocnik\\Winter\\TIS\\Log01.txt");
+		logger.LogMessage("logger OK!");
 
-using namespace std;
-using namespace concurrency;
+		shared_ptr<TD1> spInputParams(DataPARin);
+		logger.LogMessage("smartPointer OK!");
 
-typedef struct {
-	INT dimSizes[2];
-	LStrHandle String[1];
-} TD2;
-typedef TD2 **TD2Hdl;
+		parameterCount = 9;//*((*(DataPARin->Data_length))->Numeric);
+		logger.LogMessage("paramCount OK?");
 
-typedef struct {
-	INT dimSizes[2];
-	double Numeric[1];
-} TD3;
-typedef TD3 **TD3Hdl;
+		string tmp;
+		LStrToStr(*spInputParams->Name, tmp);
+		logger.LogMessage("string conversion OK!");
 
-typedef struct {
-	INT dimSizes[3];
-	INT Numeric[1];
-} TD4;
-typedef TD4 **TD4Hdl;
-
-typedef struct {
-	INT dimSize;
-	LStrHandle String[1];
-} TD5;
-typedef TD5 **TD5Hdl;
-
-typedef struct {
-	INT dimSize;
-	INT Numeric[1];
-} TD6;
-typedef TD6 **TD6Hdl;
-
-typedef struct {
-	LStrHandle Name;
-	TD2Hdl ParamStrings;
-	TD3Hdl ParamNumbers;
-	TD2Hdl FuncNames;
-	TD4Hdl FuncParAdresses;
-	TD5Hdl DataNames;
-	TD6Hdl Data_length;
-} TD1;
-
-typedef struct {
-	INT dimSize;
-	double Numeric[1];
-} TD8;
-typedef TD8 **TD8Hdl;
-
-typedef struct {
-	LStrHandle Name;
-	TD8Hdl XIn;
-	TD8Hdl YIn;
-	TD8Hdl WIn;
-} TD7;
-
-typedef struct {
-	LStrHandle Name;
-	TD8Hdl XOut;
-	TD8Hdl YOut;
-	TD8Hdl WOut;
-	TD8Hdl F;
-	TD3Hdl _2DData;
-} TD9;
-
-typedef struct {
-	LVBoolean status;
-	INT code;
-	LStrHandle source;
-} TD10;
-
-#include "../../External/cintools/lv_epilog.h"
-
-// extern "C" _declspec(dllexport) INT fdata_fast(TD1 *DataPARin, TD7 *DataIN, TD9 *DataOUT, TD10 *Error);
-
-extern "C" _declspec(dllexport) INT fdata_fast(TD1 *DataPARin, TD7 *DataIN, TD9 *DataOUT, TD10 *Error)
-{
+	}
 	UNREFERENCED_PARAMETER( DataPARin );
 	UNREFERENCED_PARAMETER(DataIN);
-	UNREFERENCED_PARAMETER(DataOUT);
+	UNREFERENCED_PARAMETER(DataOUT_F);
 	UNREFERENCED_PARAMETER(Error);
-	return 7;
+	return parameterCount + 5;
 }
 
+extern "C" _declspec(dllexport) int32_t fdata_complete(TD1 *DataPARin, TD7 *DataIN, TDComplete *DataOUT_C, TD10 *Error) {
+	UNREFERENCED_PARAMETER(DataPARin);
+	UNREFERENCED_PARAMETER(DataIN);
+	UNREFERENCED_PARAMETER(DataOUT_C);
+	UNREFERENCED_PARAMETER(Error);
+	return 88;
+}
