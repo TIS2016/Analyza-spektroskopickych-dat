@@ -5,17 +5,17 @@ extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, 
 	int parameterCount = 0;
 	{
 		DebugLogger logger("F:\\School\\3.rocnik\\Winter\\TIS\\Log01.txt");
-		logger.LogMessage("logger OK!");
+		logger.Log("logger OK!");
 
 		shared_ptr<TD1> spInputParams(DataPARin);
-		logger.LogMessage("smartPointer OK!");
+		logger.Log("smartPointer OK!");
 
 		parameterCount = 9;//*((*(DataPARin->Data_length))->Numeric);
-		logger.LogMessage("paramCount OK?");
+		logger.Log("paramCount OK?");
 
 		string tmp;
 		LStrToStr(*spInputParams->Name, tmp);
-		logger.LogMessage("string conversion OK!");
+		logger.Log("string conversion OK!");
 
 	}
 	UNREFERENCED_PARAMETER( DataPARin );

@@ -7,6 +7,7 @@ class DebugLogger
 {
 protected:
 	ofstream mLogStream;
+	string mIndentString;
 
 protected:
 
@@ -17,9 +18,15 @@ public:
 
 	~DebugLogger();
 
-	void LogMessage(__in_z const char *pMessage);
+	void Log(__in_z const char *pMessage);
 	
-	void LogMessage(__in_z const string &message);
+	void Log(__in_z const string &message);
+
+	void LogFormatted(__in_z const char *pFormat, ...);
+
+	void BeginSection();
+
+	void EndSection();
 
 };
 

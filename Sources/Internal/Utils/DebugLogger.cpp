@@ -22,17 +22,37 @@ void DebugLogger::Initialize(__in_z const char *pPath) {
 	mLogStream.open(pPath, ios_base::out | ios_base::app);
 }
 
-void DebugLogger::LogMessage(__in_z const char *pMessage) {
+void DebugLogger::Log(__in_z const char *pMessage) {
 	if (mLogStream.is_open()) {
 		const time_t currentTime = time(nullptr);
 		tm locTime;
 		localtime_s(&locTime, &currentTime);
-		mLogStream << put_time(&locTime, "%Y-%m-%d %H:%M:%S") << ": " << pMessage << endl;
+		mLogStream << mIndentString << put_time(&locTime, "%Y-%m-%d %H:%M:%S") << ": " << pMessage << endl;
 	}
 }
 
-void DebugLogger::LogMessage(__in const string& message) {
-	LogMessage(message.data());
+void DebugLogger::Log(__in const string& message) {
+	Log(message.data());
+}
+
+
+void DebugLogger::LogFormatted( __in const char *pFormat, ... ) {
+	char buff[2048];
+	ZeroMemory(buff, 2048);
+
+	va_list args;
+	va_start(args, pFormat);
+	vsnprintf_s(buff, 2047, pFormat, args);
+	mLogStream << mIndentString << buff << endl;
+	va_end(args);
+}
+
+void DebugLogger::BeginSection() {
+	mIndentString.push_back('\t');
+}
+
+void DebugLogger::EndSection() {
+	mIndentString.pop_back();
 }
 
 END_NAMESPACE
