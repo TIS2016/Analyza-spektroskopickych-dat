@@ -3,6 +3,8 @@
 
 BEGIN_NAMESPACE
 
+static const char* LOG_PATH_FILIP = "F:\\School\\3.rocnik\\Winter\\TIS\\Log01.txt";
+
 class DebugLogger
 {
 protected:
@@ -12,6 +14,8 @@ protected:
 protected:
 
 	void Initialize(__in_z const char *pPath);
+
+	void PrintRowHeader();
 
 public:
 	DebugLogger( __in_z const char *pLogFilePath );

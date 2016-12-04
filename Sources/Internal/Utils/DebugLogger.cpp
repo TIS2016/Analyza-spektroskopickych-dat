@@ -22,12 +22,17 @@ void DebugLogger::Initialize(__in_z const char *pPath) {
 	mLogStream.open(pPath, ios_base::out | ios_base::app);
 }
 
+void DebugLogger::PrintRowHeader() {
+	const time_t currentTime = time(nullptr);
+	tm locTime;
+	localtime_s(&locTime, &currentTime);
+	mLogStream << mIndentString << put_time(&locTime, "%Y-%m-%d %H:%M:%S") << ": ";
+}
+
 void DebugLogger::Log(__in_z const char *pMessage) {
 	if (mLogStream.is_open()) {
-		const time_t currentTime = time(nullptr);
-		tm locTime;
-		localtime_s(&locTime, &currentTime);
-		mLogStream << mIndentString << put_time(&locTime, "%Y-%m-%d %H:%M:%S") << ": " << pMessage << endl;
+		PrintRowHeader();
+		mLogStream << pMessage << endl;
 	}
 }
 
@@ -35,16 +40,19 @@ void DebugLogger::Log(__in const string& message) {
 	Log(message.data());
 }
 
-
 void DebugLogger::LogFormatted( __in const char *pFormat, ... ) {
-	char buff[2048];
-	ZeroMemory(buff, 2048);
+	if (mLogStream.is_open()) {
+		char buff[2048];
+		ZeroMemory(buff, 2048);
 
-	va_list args;
-	va_start(args, pFormat);
-	vsnprintf_s(buff, 2047, pFormat, args);
-	mLogStream << mIndentString << buff << endl;
-	va_end(args);
+		va_list args;
+		va_start(args, pFormat);
+		vsnprintf_s(buff, 2047, pFormat, args);
+		va_end(args);
+
+		PrintRowHeader();
+		mLogStream << buff << endl;
+	}
 }
 
 void DebugLogger::BeginSection() {

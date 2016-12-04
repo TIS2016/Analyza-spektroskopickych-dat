@@ -13,7 +13,7 @@ int main()
 	LStrPtr pIn = in.Ptr();
 	for (int i = 0; i < 5; i++) {
 		pIn->cnt = 4 - i;
-		*(pIn->str) = 'a' + i;
+		*(pIn->str) = static_cast<char>('a' + i);
 		pIn++;
 	}
 
@@ -22,8 +22,8 @@ int main()
 
 	printf("%s", out.data() );
 
-	DebugLogger logger("F:\\School\\3.rocnik\\Winter\\TIS\\Log01.txt");
-	logger.LogMessage("pica blesky");
+	DebugLogger logger(LOG_PATH_FILIP);
+	logger.Log("pica blesky");
 	
 	
 

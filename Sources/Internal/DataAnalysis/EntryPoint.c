@@ -1,21 +1,58 @@
 #include "stdafx.h"
 #include "EntryPoint.h"
+#include <vector>
+
+void DumpToLog(__in vector<string> &toDump, __in shared_ptr<DebugLogger> spLogger) { 
+	spLogger->BeginSection();
+	spLogger->Log("Dumping...");
+	for (auto it = toDump.begin(); it != toDump.end(); it++) {
+		spLogger->Log(*it);
+	}
+	spLogger->EndSection();
+}
+
+void GetInputParamStrings( __in shared_ptr<TD1> spInParams, __out vector<string> &outParams) {
+	string tmp;
+	TD2Hdl firstParamStrDeref = spInParams->ParamStrings;
+	size_t count = (*firstParamStrDeref)->dimSizes[0];
+
+	TD2 *pParamIn = *firstParamStrDeref;
+	for (size_t i = 0; i < count; i++) {
+		LStrPtr inStr = **(pParamIn->String);
+		LStrToStr(inStr, tmp);
+
+		// TODO: trim
+		outParams.push_back(tmp);
+
+		tmp.clear();
+		pParamIn++;
+	}
+}
 
 extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, TDFast *DataOUT_F, TD10 *Error) {
 	int parameterCount = 0;
 	{
-		DebugLogger logger("F:\\School\\3.rocnik\\Winter\\TIS\\Log01.txt");
-		logger.Log("logger OK!");
+		shared_ptr<DebugLogger> spLogger( new DebugLogger(LOG_PATH_FILIP) );
+
+		spLogger->Log("logger OK!");
 
 		shared_ptr<TD1> spInputParams(DataPARin);
-		logger.Log("smartPointer OK!");
+		spLogger->Log("smartPointer OK!");
 
-		parameterCount = 9;//*((*(DataPARin->Data_length))->Numeric);
-		logger.Log("paramCount OK?");
+		string dumpStr;
+		LStrToStr(*(spInputParams->Name), dumpStr);
+		spLogger->Log(dumpStr);
 
-		string tmp;
-		LStrToStr(*spInputParams->Name, tmp);
-		logger.Log("string conversion OK!");
+		if ( spInputParams->Data_length != nullptr) {
+			spLogger->LogFormatted("Data_length: %d", 9 );
+		} else {
+			spLogger->Log("Data_length is nullptr");
+		}
+
+		vector<string> paramStrings;
+		paramStrings.reserve(256);
+		GetInputParamStrings(spInputParams, paramStrings);
+		DumpToLog(paramStrings, spLogger);
 
 	}
 	UNREFERENCED_PARAMETER( DataPARin );
