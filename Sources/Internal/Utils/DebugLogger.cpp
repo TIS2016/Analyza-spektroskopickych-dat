@@ -52,7 +52,9 @@ void DebugLogger::BeginSection() {
 }
 
 void DebugLogger::EndSection() {
-	mIndentString.pop_back();
+	if ( !mIndentString.empty() ) {
+		mIndentString.pop_back();
+	}
 }
 
 END_NAMESPACE
