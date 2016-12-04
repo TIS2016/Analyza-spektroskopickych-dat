@@ -4,6 +4,7 @@
 BEGIN_NAMESPACE
 
 static const char* LOG_PATH_FILIP = "F:\\School\\3.rocnik\\Winter\\TIS\\Log01.txt";
+static const char* MARTIN_LOG_PATH = "C:\\Users\\Martin\\Documents\\skola\\TIS_projekt\\Logy\\log.txt";
 
 class DebugLogger
 {
