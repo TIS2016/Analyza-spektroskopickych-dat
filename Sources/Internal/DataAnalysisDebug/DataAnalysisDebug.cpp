@@ -18,13 +18,12 @@ int main()
 	}
 
 	std::string out;
-	DataAnalysis::Utils::LStrToStr(in.Ptr(), out);
+	LStrToStr(in.Ptr(), out);
 
 	printf("%s", out.data() );
 
 	DebugLogger logger("F:\\School\\3.rocnik\\Winter\\TIS\\Log01.txt");
-	logger.LogMessage("pica blesky");
-	
+	logger.Log("pica blesky");
 	
 
 	int barrier{ 0 };
