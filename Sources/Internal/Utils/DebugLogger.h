@@ -3,6 +3,8 @@
 
 BEGIN_NAMESPACE
 
+const static char* MARTIN_LOG_PATH = "C:\\Users\\Martin\\Documents\\skola\\TIS_projekt\\Logy\\log.txt";
+
 class DebugLogger
 {
 protected:
