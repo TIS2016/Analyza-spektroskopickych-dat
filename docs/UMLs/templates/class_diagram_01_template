@@ -1,0 +1,46 @@
+@startuml
+note "This part was created by PC" as N1
+ 
+ LabViewProgram ... N1
+ 
+ class LabViewProgram {
+   +loadDll()
+ }
+ 
+ class EntryPoint {
+   +fdata_fast()
+ }
+
+ LabViewProgram --|> EntryPoint
+
+ interface UtilsLib
+
+ package Utils {
+   
+   UtilsLib -- Utils
+
+   class MemoryAllocator {
+     +Allocate()
+     +AllocateItem()
+     +Release()
+     +ReleaseItem()
+   }
+
+   class Buffer {
+     +read()
+     +write()
+   }
+   
+ }
+
+ package InputParser {
+
+ }
+
+ package ComputationCore {
+
+ }
+
+ EntryPoint --|> InputParser
+ EntryPoint --|> ComputationCore
+@enduml
