@@ -21,3 +21,5 @@ using namespace std;
 
 using namespace DataAnalysis;
 using namespace DataAnalysis::Utils;
+
+#include "Transformations.h"

@@ -98,6 +98,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -147,14 +148,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.c" />
+    <ClCompile Include="IFunction.cpp" />
+    <ClCompile Include="Polynomials.cpp" />
+    <ClCompile Include="Splines.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Trigonometric.cpp" />
+    <ClCompile Include="OtherFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EntryPoint.h" />
+    <ClInclude Include="IFunction.h" />
+    <ClInclude Include="Polynomials.h" />
+    <ClInclude Include="Splines.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Transformations.h" />
+    <ClInclude Include="Trigonometric.h" />
+    <ClInclude Include="OtherFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utils\Utils.vcxproj">
