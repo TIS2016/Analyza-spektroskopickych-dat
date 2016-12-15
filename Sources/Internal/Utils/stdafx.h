@@ -12,13 +12,8 @@
 
 // TODO: reference additional headers your program requires here
 #include <string>
-
+#include <vector>
 
 using namespace std;
-
-#undef BEGIN_NAMESPACE
-#undef END_NAMESPACE
-#define BEGIN_NAMESPACE namespace DataAnalysis { namespace Utils {
-#define END_NAMESPACE } }
 
 #include "../../External/ExternalLib.h"

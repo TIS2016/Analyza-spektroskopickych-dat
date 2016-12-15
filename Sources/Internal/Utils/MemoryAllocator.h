@@ -8,67 +8,70 @@
 
 #include <stdlib.h>
 
-namespace Internal {
-	
-#pragma push_macro("new")
-#pragma push_macro("delete")
+namespace DataAnalysis { namespace Utils {
 
-#undef new
-#undef delete
+	namespace Internal {
 
-template < typename T > class MemoryAllocatorImplementation {
-private:
-	struct AllocationHelper {
-		T o;
-		
-		void* operator new ( size_t size )
+	#pragma push_macro("new")
+	#pragma push_macro("delete")
+
+	#undef new
+	#undef delete
+
+	template < typename T > class MemoryAllocatorImplementation {
+	private:
+		struct AllocationHelper {
+			T o;
+
+			void* operator new ( size_t size )
+			{
+				return malloc ( size );
+			}
+
+			void* operator new[]( size_t size )
+			{
+				return malloc ( size );
+			}
+
+				void operator delete ( void *ptr )
+			{
+				free ( ptr );
+			}
+
+			void operator delete[]( void *ptr )
+			{
+				free ( ptr );
+			}
+		};
+
+	public:
+
+		static T* Allocate ( size_t size )
 		{
-			return malloc( size );
-		}
-		
-		void* operator new[] ( size_t size )
+			return (T*)( new AllocationHelper[size] );
+		};
+
+		static T* AllocateItem ( size_t size )
 		{
-			return malloc( size );
+			return (T*)( new AllocationHelper ( size ) );
 		}
-		
-		void operator delete ( void *ptr )
+
+		static void Release ( T* buffer )
 		{
-			free( ptr );
+			delete[] ( AllocationHelper * )( buffer );
 		}
-		
-		void operator delete[] ( void *ptr )
+
+		static void ReleaseItem ( T* pItem )
 		{
-			free( ptr );
+			delete (AllocationHelper *)( pItem );
 		}
+
 	};
-	
-public:
-	
-	static T* Allocate ( size_t size )
-	{
-		return (T*)(new AllocationHelper[size]);
-	};
-	
-	static T* AllocateItem( size_t size )
-	{
-		return (T*)(new AllocationHelper(size));
-	}
-	
-	static void Release( T* buffer )
-	{
-		delete[] (AllocationHelper *)(buffer);
-	}
-	
-	static void ReleaseItem( T* pItem )
-	{
-		delete (AllocationHelper *)(pItem);
-	}
-	
-};
 
-#pragma pop_macro("new")
-#pragma pop_macro("delete")
-	
-}
+	#pragma pop_macro("new")
+	#pragma pop_macro("delete")
 
-template < typename T > class MemoryAllocator: public Internal::MemoryAllocatorImplementation< T > {};
+	}
+
+	template < typename T > class MemoryAllocator : public Internal::MemoryAllocatorImplementation< T > {};
+} }
