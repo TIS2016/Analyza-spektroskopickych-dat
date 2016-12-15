@@ -125,7 +125,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
-    <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="DebugLogger.h" />
     <ClInclude Include="MemoryAllocator.h" />
     <ClInclude Include="stdafx.h" />

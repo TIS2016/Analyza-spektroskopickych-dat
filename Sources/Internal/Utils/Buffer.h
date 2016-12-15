@@ -25,13 +25,15 @@ namespace DataAnalysis { namespace Utils {
 		}
 
 		Buffer( __in size_t count, __in_ecount( count ) T *pSrc ) {
-			Allocate( count );
-			memcpy( m_pItems, pSrc, count * sizeof( T ) );
+			if ( SUCCEEDED( Allocate( count ) ) ) {
+				memcpy( m_pItems, pSrc, count * sizeof( T ) );
+			}
 		}
 
 		Buffer( __in Buffer<T> &copyFrom ) {
-			Allocate( copyFrom.Length() );
-			memcpy( copyFrom.Ptr(), m_pItems, m_size * sizeof( T ) );
+			if ( SUCCEEDED( Allocate( copyFrom.Length() ) ) ) {
+				memcpy( copyFrom.Ptr(), m_pItems, m_size * sizeof( T ) );
+			}
 		}
 	
 		~Buffer () {
@@ -40,9 +42,9 @@ namespace DataAnalysis { namespace Utils {
 			}
 		}
 
-		inline T* Ptr () { return m_pItems; }
+		inline T* Ptr () const { return m_pItems; }
 	
-		inline size_t Length () { return m_size; }
+		inline size_t Length () const { return m_size; }
 	
 		HRESULT Allocate ( size_t length ) {
 			T *temp = m_pItems;
@@ -60,8 +62,26 @@ namespace DataAnalysis { namespace Utils {
 	
 			return S_OK;
 		}
+
+		HRESULT Set( __in const Buffer<T> &src ) {
+			HRESULT hr = Allocate( src.Length() );
+			if ( SUCCEEDED( hr ) ) {
+				memcpy( m_pItems, src.Ptr(), m_size * sizeof( T ) );
+			}
+			
+			return hr;
+		}
+
+		HRESULT Set( __in const vector<T> &src ) {
+			HRESULT hr = Allocate( src.size() );
+			if ( SUCCEEDED( hr ) ) {
+				memcpy( m_pItems, src.data(), m_size * sizeof( T ) );
+			}
+
+			return hr;
+		}
 	
-		T& operator[] ( size_t pos ) {
+		T& operator[] ( size_t pos ) const {
 			return *( m_pItems + pos );
 		}
 	
