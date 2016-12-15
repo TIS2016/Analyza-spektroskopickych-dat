@@ -94,6 +94,7 @@
     <ClCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DATAANALYSIS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\..\Internal;$(SolutionDir)..\..\..\..\External;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,27 +149,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.c" />
-    <ClCompile Include="IFunction.cpp" />
-    <ClCompile Include="Polynomials.cpp" />
-    <ClCompile Include="Splines.cpp" />
+    <ClCompile Include="InOutConversion.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Trigonometric.cpp" />
-    <ClCompile Include="OtherFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="EntryPoint.h" />
-    <ClInclude Include="IFunction.h" />
-    <ClInclude Include="Polynomials.h" />
-    <ClInclude Include="Splines.h" />
+    <ClInclude Include="InOutConversion.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Transformations.h" />
-    <ClInclude Include="Trigonometric.h" />
-    <ClInclude Include="OtherFunctions.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Transformations\Transformations.vcxproj">
+      <Project>{9ddf376e-7cfc-4269-949c-b041d3907f07}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.vcxproj">
       <Project>{5ba0e6fe-834f-48fe-92ea-d6de48d588d7}</Project>
     </ProjectReference>

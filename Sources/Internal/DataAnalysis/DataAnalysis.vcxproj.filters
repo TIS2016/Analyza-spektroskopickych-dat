@@ -3,45 +3,12 @@
   <ItemGroup>
     <ClCompile Include="EntryPoint.c" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="IFunction.cpp">
-      <Filter>Functions</Filter>
-    </ClCompile>
-    <ClCompile Include="Polynomials.cpp">
-      <Filter>Functions</Filter>
-    </ClCompile>
-    <ClCompile Include="Trigonometric.cpp">
-      <Filter>Functions</Filter>
-    </ClCompile>
-    <ClCompile Include="Splines.cpp">
-      <Filter>Functions</Filter>
-    </ClCompile>
-    <ClCompile Include="OtherFunctions.cpp">
-      <Filter>Functions</Filter>
-    </ClCompile>
+    <ClCompile Include="InOutConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="EntryPoint.h" />
-    <ClInclude Include="IFunction.h">
-      <Filter>Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Polynomials.h">
-      <Filter>Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Trigonometric.h">
-      <Filter>Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Splines.h">
-      <Filter>Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="OtherFunctions.h">
-      <Filter>Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Transformations.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Functions">
-      <UniqueIdentifier>{d9b75ae4-c102-4e1e-8463-43dda046facd}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="InOutConversion.h" />
+    <ClInclude Include="CommonTypes.h" />
   </ItemGroup>
 </Project>

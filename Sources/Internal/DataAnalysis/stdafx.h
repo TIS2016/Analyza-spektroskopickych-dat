@@ -12,14 +12,18 @@
 
 // TODO: reference additional headers your program requires here
 #include <string>
+#include <vector>
 
 using namespace std;
 
 
 #include "../../External/ExternalLib.h"
 #include "../Utils/UtilsLib.h"
+#include "CommonTypes.h"
 
 using namespace DataAnalysis;
 using namespace DataAnalysis::Utils;
 
-#include "Transformations.h"
+#include "../Transformations/TransformationsLib.h"
+
+using namespace DataAnalysis::Transformations;
