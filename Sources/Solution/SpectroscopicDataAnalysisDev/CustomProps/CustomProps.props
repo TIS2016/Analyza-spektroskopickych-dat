@@ -27,6 +27,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAs>CompileAsCpp</CompileAs>
       <MinimalRebuild>false</MinimalRebuild>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
