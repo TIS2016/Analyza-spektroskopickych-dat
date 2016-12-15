@@ -6,6 +6,8 @@
 //  Copyright © 2016 Filip Kovac. All rights reserved.
 //
 
+#pragma once
+
 #include "stdafx.h"
 #include "MemoryAllocator.h"
 
