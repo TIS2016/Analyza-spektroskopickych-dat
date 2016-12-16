@@ -123,9 +123,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CompositeFunctions.h" />
     <ClInclude Include="DataTransformations.h" />
     <ClInclude Include="InputTransformation.h" />
