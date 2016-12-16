@@ -28,7 +28,6 @@ namespace DataAnalysis { namespace Transformations {
 				1) HRESULT return type for Apply methods
 		*/
 	public:
-
 		virtual void Apply ( __in const BaseType &in, __out BaseType &out ) const = 0;
 
 		inline void Apply ( __in const size_t count, __in_ecount ( count ) const BaseType *pIn, __out_ecount ( count ) BaseType *pOut ) const {

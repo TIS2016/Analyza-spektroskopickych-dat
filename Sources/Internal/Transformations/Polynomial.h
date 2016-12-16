@@ -35,8 +35,19 @@ namespace DataAnalysis { namespace Transformations {
 			mType = FT_POLY_BASIC;
 		};
 
+		/** 
+		Implementation for basic polynomial function in form a*n^0 + b*n^1 + c*n^2 + ... + {alpha}*n^mDegree
+		Using: 
+			- mDegree as max degree of polynomial
+			- mValues as {a, b, c, ... } parameters in various polynomial degrees
+		*/
 		virtual void Apply ( __in const BaseType &in, __out BaseType &out ) const {
-			out = in;
+			//initialization check in super (aspon tak som to pochopil)
+			out = 0;
+			for (size_t exp = 0; exp < mDegree; exp++) {
+				out += pow(in, exp) * mValues[exp];
+			}
+			//out = in; 
 		};
 
 	protected:

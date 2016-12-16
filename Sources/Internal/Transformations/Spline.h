@@ -1,7 +1,6 @@
 #pragma once
 
 #include "TransformationsLibPrivate.h"
-
 namespace DataAnalysis { namespace Transformations {
 
 	template <class BaseType = double> class CubicSplineParamPair {
