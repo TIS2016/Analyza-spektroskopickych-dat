@@ -8,6 +8,12 @@ namespace DataAnalysis { namespace Transformations {
 		Buffer<Buffer<double>> functValues;
 	};
 
+	struct TransformationHeaderInternal {
+		FUNCTION_TYPE transformationType;
+		Buffer<FUNCTION_TYPE> subFunctions;
+		Buffer<Buffer<double>> functionParameters;
+	};
+
 	// Type converting functions (LW<->Internal) depend heavily enum's structure
 	enum FUNCTION_TYPE {
 		FT_POLY_BASIC = 0x1000,
