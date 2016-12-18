@@ -65,22 +65,21 @@ namespace DataAnalysis { namespace Utils {
 			return S_OK;
 		}
 
-		HRESULT Set( __in const Buffer<T> &src ) {
-			HRESULT hr = Allocate( src.Length() );
+		HRESULT Set( __in const size_t count, __in const T *pSrc ) {
+			HRESULT hr = Allocate( count );
 			if ( SUCCEEDED( hr ) ) {
-				memcpy( m_pItems, src.Ptr(), m_size * sizeof( T ) );
+				memcpy( m_pItems, pSrc, count * sizeof( T ) );
 			}
 			
 			return hr;
 		}
 
-		HRESULT Set( __in const vector<T> &src ) {
-			HRESULT hr = Allocate( src.size() );
-			if ( SUCCEEDED( hr ) ) {
-				memcpy( m_pItems, src.data(), m_size * sizeof( T ) );
-			}
+		HRESULT Set( __in const Buffer<T> &src ) {
+			return Set( src.Length(), src.Ptr() );
+		}
 
-			return hr;
+		HRESULT Set( __in const vector<T> &src ) {
+			return Set( src.size(), src.data() );
 		}
 	
 		T& operator[] ( size_t pos ) const {
