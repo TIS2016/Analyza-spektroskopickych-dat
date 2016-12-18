@@ -1,8 +1,5 @@
 #pragma once
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 #include "TransformationsLibPrivate.h"
 
 namespace DataAnalysis { namespace Transformations {
@@ -21,15 +18,6 @@ namespace DataAnalysis { namespace Transformations {
 			mInitialized = true;
 		}
 
-		void Initialize( __in const Buffer<BaseType> &params ) {
-			if ( params.Length() >= 3 ) {
-				mA = params[0];
-				mB = params[1];
-				mC = params[2];
-				mInitialized = true;
-			}
-		}
-
 		void Initialize( __in_ecount( 3 ) const BaseType *pParams ) {
 			mA = *pParams;
 			mB = *( pParams + 1 );
@@ -37,12 +25,15 @@ namespace DataAnalysis { namespace Transformations {
 			mInitialized = true;
 		}
 
+		void Initialize( __in const Buffer<BaseType> &params ) {
+			if ( params.Length() >= 3 ) {
+				Initialize( params.Ptr() );
+			}
+		}
+
 		void Initialize( __in const vector<BaseType> &params ) {
 			if ( params.size() >= 3 ) {
-				mA = params[0];
-				mB = params[1];
-				mC = params[2];
-				mInitialized = true;
+				Initialize( params.data() );
 			}
 		}
 

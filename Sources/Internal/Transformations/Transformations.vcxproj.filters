@@ -22,12 +22,15 @@
     <ClInclude Include="InputTransformation.h">
       <Filter>DataTransformations</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="InputParser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="InputTransformation.cpp">
       <Filter>DataTransformations</Filter>
     </ClCompile>
+    <ClCompile Include="InputParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Functions">
@@ -35,6 +38,9 @@
     </Filter>
     <Filter Include="DataTransformations">
       <UniqueIdentifier>{897e5ba0-b10d-4a6d-a62f-9ab6d6a2075e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InputParsing">
+      <UniqueIdentifier>{004e9fec-6377-48d2-bd01-a9d18b06f356}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

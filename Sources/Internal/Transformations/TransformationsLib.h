@@ -6,9 +6,7 @@
 #include "Trigonometric.h"
 #include "CompositeFunctions.h"
 #include "DataTransformations.h"
-/*
 #include "InputTransformation.h"
-*/
 
 namespace DataAnalysis { namespace Transformations {
 

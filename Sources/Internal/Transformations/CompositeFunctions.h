@@ -5,7 +5,7 @@
 
 namespace DataAnalysis { namespace Transformations {
 
-	template <class SampleClass = MeasurementSample, class BaseType = double> class SummaryOperation : public IFunction<SampleClass> {
+	template <class BaseType = double, class SampleClass = MeasurementSample> class SummaryOperation : public IFunction<SampleClass> {
 	public:
 		void Initialize(
 			__in const shared_ptr< IFunction<BaseType> > spPoly,

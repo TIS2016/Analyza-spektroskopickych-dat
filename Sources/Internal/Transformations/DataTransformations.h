@@ -13,10 +13,20 @@ namespace DataAnalysis { namespace Transformations {
 			- Scale: can be any function, on basic type, which implements IFunction interface
 			- Offset: any number, shifts X axis by constant
 	*/
-	class XTransform : public IFunction<MeasurementSample> {
+	template <class BaseType = double> class XTransform : public IFunction<MeasurementSample> {
 	public:
 
-		XTransform ( __in double const off, __in const shared_ptr< IFunction<double> > spScaleFunction ) : mOffset ( off ), mSpScaleFunction ( spScaleFunction ) {};
+		XTransform () {
+			mType = FT_TRANSFORM_X;
+		};
+		
+		void Initialize( __in const BaseType off, __in const shared_ptr< IFunction<BaseType> > spScaleFunction ) {
+			if ( spScaleFunction != nullptr ) {
+				mOffset = off;
+				mSpScaleFunction = spS :DcaleFunction;
+				mInitialized = true;
+			}
+		}
 
 		virtual inline void Apply ( __in const MeasurementSample &in, __out MeasurementSample &out ) const {
 			mSpScaleFunction->Apply ( in.X, out.X );
@@ -24,8 +34,8 @@ namespace DataAnalysis { namespace Transformations {
 		}
 
 	protected:
-		const double mOffset;
-		const shared_ptr< IFunction<double> > mSpScaleFunction;
+		BaseType mOffset;
+		shared_ptr< IFunction<BaseType> > mSpScaleFunction;
 	};
 
 
@@ -35,22 +45,31 @@ namespace DataAnalysis { namespace Transformations {
 			- Offset: any function, on basic type, which implements IFunction interface ( polynomial in this case )
 			- Summary: any funcion, on MeasurementSample type, which implements IFunction interface ( in our case: ( Yin *arithmetic op* ( Polynomial(Xin) + Trigonometric(Xin) + Spline(Xin) ) )
 	*/
-	class YTransform : public IFunction<MeasurementSample> {
+	template <class BaseType = double> class YTransform : public IFunction<MeasurementSample> {
 	public:
 
-		YTransform ( __in const shared_ptr< IFunction<double> > spOffsetFunct, __in const shared_ptr< IFunction<MeasurementSample> > spSummaryFunct ) :
-			mSpSummaryFunction ( spSummaryFunct ), mSpOffsetFunction ( spOffsetFunct ) {};
+		YTransform () {
+			mType = FT_TRANSFORM_Y;
+		};
+
+		void Initialize( __in const shared_ptr< IFunction<BaseType> > spOffsetFunct, __in const shared_ptr< IFunction<MeasurementSample> > spSummaryFunct ) {
+			if ( (spOffsetFunct != nullptr) && (spSummaryFunct != nullptr) ) {
+				mSpOffsetFunction = spOffsetFunct;
+				mSpSummaryFunction = spSummaryFunct;
+				mInitialized = true;
+			}
+		}
 
 		virtual inline void Apply ( __in const MeasurementSample &in, __out MeasurementSample &out ) const {
-			double YOff = 0;
+			BaseType YOff;
 			mSpOffsetFunction->Apply ( in.X, YOff );
 			mSpSummaryFunction->Apply ( in, out );
 			out.Y += YOff;
 		}
 
 	protected:
-		const shared_ptr< IFunction<double> > mSpOffsetFunction;
-		const shared_ptr< IFunction<MeasurementSample> > mSpSummaryFunction;
+		shared_ptr< IFunction<BaseType> > mSpOffsetFunction;
+		shared_ptr< IFunction<MeasurementSample> > mSpSummaryFunction;
 	};
 
 	/*
@@ -60,10 +79,24 @@ namespace DataAnalysis { namespace Transformations {
 
 		Input: Samples on which XTransform has been already applied ( eg. XOut )
 	*/
-	class BaselineTransform : public IFunction<MeasurementSample> {
+	template <class BaseType = double> class BaselineTransform : public IFunction<MeasurementSample> {
 
-		BaselineTransform ( __in const shared_ptr< IFunction<double> > spPoly, __in const shared_ptr< IFunction<double> > spTrig, __in const shared_ptr< IFunction<double> > spSpline ) :
-			mSpSpline ( spSpline ), mSpTrigonometric ( spTrig ), mSpPolynomial ( spPoly ) {};
+		BaselineTransform() {
+			mType = FT_MODEL_BASELINE;
+		};
+
+		void Initialize( 
+			__in const shared_ptr< IFunction<BaseType> > spPoly, 
+			__in const shared_ptr< IFunction<BaseType> > spTrig, 
+			__in const shared_ptr< IFunction<BaseType> > spSpline ) 
+		{
+			if ( ( spPoly != nullptr ) && ( spTrig != nullptr ) && ( spSpline != nullptr ) ) {
+				mSpPolynomial = spPoly;
+				mSpTrigonometric = spTrig;
+				mSpSpline = spSpline;
+				mInitialized = true;
+			}
+		}
 
 		virtual inline void Apply ( __in const MeasurementSample &in, __out MeasurementSample &out ) const {
 			double poly, trig = 0;
@@ -74,9 +107,9 @@ namespace DataAnalysis { namespace Transformations {
 		}
 
 	protected:
-		const shared_ptr< IFunction<double> > mSpPolynomial;
-		const shared_ptr< IFunction<double> > mSpTrigonometric;
-		const shared_ptr< IFunction<double> > mSpSpline;
+		shared_ptr< IFunction<BaseType> > mSpPolynomial;
+		shared_ptr< IFunction<BaseType> > mSpTrigonometric;
+		shared_ptr< IFunction<BaseType> > mSpSpline;
 	};
 
 } }

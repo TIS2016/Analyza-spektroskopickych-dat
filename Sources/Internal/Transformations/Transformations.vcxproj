@@ -125,8 +125,10 @@
   <ItemGroup>
     <ClInclude Include="CompositeFunctions.h" />
     <ClInclude Include="DataTransformations.h" />
+    <ClInclude Include="InputParser.h" />
     <ClInclude Include="InputTransformation.h" />
     <ClInclude Include="Polynomial.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Spline.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TransformationsLib.h" />
@@ -134,9 +136,8 @@
     <ClInclude Include="Trigonometric.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="InputTransformation.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="InputParser.cpp" />
+    <ClCompile Include="InputTransformation.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

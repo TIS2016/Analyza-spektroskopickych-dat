@@ -26,6 +26,7 @@ namespace DataAnalysis { namespace Transformations {
 			}
 		}
 		*/
+
 	};
 
 
@@ -35,6 +36,22 @@ namespace DataAnalysis { namespace Transformations {
 			mType = FT_POLY_BASIC;
 		};
 
+		void Initialize( __in const size_t count, __in_ecount( count ) const BaseType *pParams ) {
+			if ( count > 0 ) {
+				mDegree = count - 1;
+				mConstants.Set( count, pParams );
+				mInitialized = true;
+			}
+		}
+
+		void Initialize( __in const Buffer<BaseType> &params ) {
+			Initialize( params.Length(), params.Ptr() );
+		}
+
+		void Initialize( __in const vector<BaseType> &params ) {
+			Initialize( params.size(), params.data() );
+		}
+
 		/** 
 		Implementation for basic polynomial function in form a*n^0 + b*n^1 + c*n^2 + ... + {alpha}*n^mDegree
 		Using: 
@@ -42,17 +59,15 @@ namespace DataAnalysis { namespace Transformations {
 			- mValues as {a, b, c, ... } parameters in various polynomial degrees
 		*/
 		virtual void Apply ( __in const BaseType &in, __out BaseType &out ) const {
-			//initialization check in super (aspon tak som to pochopil)
-			out = 0;
-			for (size_t exp = 0; exp < mDegree; exp++) {
-				out += pow(in, exp) * mValues[exp];
-			}
-			//out = in; 
+			out = mConstants[0];
+			for (size_t exp = 1; exp <= mDegree; exp++) {
+				out += pow(in, exp) * mConstants[exp];
+			} 
 		};
 
 	protected:
 		UINT mDegree;
-		Buffer<BaseType> mValues;
+		Buffer<BaseType> mConstants;
 	};
 
 	template <class BaseType = double> class LegendrePolynomial : public Polynomial<BaseType> {
