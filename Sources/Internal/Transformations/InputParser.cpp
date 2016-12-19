@@ -11,7 +11,7 @@ void Transformations::ConvertToInternal(TransformationHeader & in, Transformatio
 
 	out.subFunctions.Allocate(in.subFunctions.Length);
 	for (size_t i = 0; i < in.subFunctions.Length; i++){
-		out.subFunctions[i] = GetInternalFunctionType(in.subFunctions[i], 0);
+		out.subFunctions[i] = GetInternalFunctionType(in.subFunctions[i], in.functValues[i][0]);
 	}
 
 }
