@@ -14,4 +14,6 @@ namespace DataAnalysis { namespace Transformations {
 
 	shared_ptr<IFunction<MeasurementSample>> GetTransformation( __in TransformationHeader &transformation );
 
+	void ConvertToInternal(__in TransformationHeader &in, __out TransformationHeaderInternal &out);
+
 } }
