@@ -11,6 +11,7 @@
 namespace DataAnalysis { namespace Transformations {
 
 	// Function for converting internal function type enum values to input/output function types
+	// does not support converting "FT_MODEL_..." types ( mainly because they are not represented by any number in LabView structs :) )
 	inline int GetInputFunctionType( __in const FUNCTION_TYPE type ) {
 		int resType = static_cast<int>(type);
 		while ( resType >= 0x1000 ) {
@@ -28,6 +29,7 @@ namespace DataAnalysis { namespace Transformations {
 				Types:	0 -> basic polynomial
 						1 -> Legendre polynomial
 						2 -> Chebyshev polynomial
+				XScl apparently does not come with typeId -> Static mapping
 			Trigonometric functions: YTrg
 				Types:	0 -> Sin
 						1 -> Cos
@@ -36,9 +38,14 @@ namespace DataAnalysis { namespace Transformations {
 			Summary operation: YTyp
 				Types:	1 -> Multiplication
 						2 -> Division
+			Transformations: XT/YT/BL/PK
+				Mapped statically
 	*/
 	inline FUNCTION_TYPE GetInternalFunctionType( __in const string &functName, __in int typeId = 0 ) {
-		if ( functName.compare( "XScl" ) == 0 || functName.compare( "YOff" ) == 0 || functName.compare( "YPol" ) == 0 ) {
+		if ( functName.compare( "XScl" ) == 0 ) {
+			typeId = FT_POLY_BASIC;
+		}
+		else if ( functName.compare( "YOff" ) == 0 || functName.compare( "YPol" ) == 0 ) {
 			typeId += 0x1000;
 		}
 		else if ( functName.compare( "YTrg" ) == 0 ) {
@@ -49,6 +56,18 @@ namespace DataAnalysis { namespace Transformations {
 		}
 		else if ( functName.compare( "YTyp" ) == 0 ) {
 			typeId += 0x4000;
+		} 
+		else if ( functName.compare( "XT" ) == 0 ) {
+			typeId = FT_TRANSFORM_X;
+		}
+		else if ( functName.compare( "YT" ) == 0 ) {
+			typeId = FT_TRANSFORM_Y;
+		}
+		else if ( functName.compare( "BL" ) == 0 ) {
+			typeId = FT_MODEL_BASELINE;
+		}
+		else if ( functName.compare( "PK" ) == 0 ) {
+			typeId = FT_MODEL_PEAKS;
 		}
 		else {
 			return FT_UNKNOWN;

@@ -42,7 +42,7 @@ namespace DataAnalysis { namespace Transformations {
 			spTransformation->ApplyOnData( inputSize, mInputSamples.data(), pOutput );
 		}
 
-		SetFlag( ITS_CALCULATION_DONE );
+		SetFlag( ITS_TRANSFORM_DONE );
 	}
 
 	void InputTransformation::CalculateTransformations( __out Buffer<MeasurementSample> &output ) {
@@ -52,6 +52,8 @@ namespace DataAnalysis { namespace Transformations {
 		}
 		
 		CalculateTransformations( inputSize, output.Ptr() );
+		// copy output data to internal, so that model can be calculated
+		mOutputSamples.assign( output.Ptr(), output.Ptr() + inputSize );
 	}
 
 	void InputTransformation::CalculateTransformations() {

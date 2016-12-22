@@ -2,18 +2,6 @@
 
 namespace DataAnalysis { namespace Transformations {
 	
-	struct TransformationHeader {
-		string name;
-		Buffer<string> subFunctions;
-		Buffer<Buffer<double>> functValues;
-	};
-
-	struct TransformationHeaderInternal {
-		FUNCTION_TYPE transformationType;
-		Buffer<FUNCTION_TYPE> subFunctions;
-		Buffer<Buffer<double>> functionParameters;
-	};
-
 	// Type converting functions (LW<->Internal) depend heavily enum's structure
 	enum FUNCTION_TYPE {
 		FT_POLY_BASIC = 0x1000,
@@ -29,13 +17,25 @@ namespace DataAnalysis { namespace Transformations {
 		FT_SUMOP_DIV = 0x4001,
 		FT_SUMOP_MUL = 0x4002,
 
-		FT_TRANSFORM_X = 0x5000,
-		FT_TRANSFORM_Y = 0x5001,
-		FT_MODEL = 0x5002,
-		FT_MODEL_BASELINE = 0x5003,
-		FT_MODEL_PEAKS = 0x5004,
+		FT_TRANSFORM_X = 0x9000,
+		FT_TRANSFORM_Y = 0x9001,
+		FT_MODEL = 0x9002,
+		FT_MODEL_BASELINE = 0x9003,
+		FT_MODEL_PEAKS = 0x9004,
 
 		FT_UNKNOWN = 0xFFFFFFFF
+	};
+
+	struct TransformationHeader {
+		string name;
+		Buffer<string> subFunctions;
+		Buffer<Buffer<double>> functValues;
+	};
+
+	struct TransformationHeaderInternal {
+		FUNCTION_TYPE transformationType;
+		Buffer<FUNCTION_TYPE> subFunctions;
+		Buffer<Buffer<double>> functionParameters;
 	};
 
 	template <class BaseType> class IFunction {

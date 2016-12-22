@@ -128,7 +128,6 @@
     <ClInclude Include="InputParser.h" />
     <ClInclude Include="InputTransformation.h" />
     <ClInclude Include="Polynomial.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Spline.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TransformationsLib.h" />

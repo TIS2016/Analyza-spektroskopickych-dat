@@ -16,9 +16,10 @@ namespace DataAnalysis { namespace Transformations {
 	*/
 
 	enum INPUT_TRANSFORMATION_STATE {
-		ITS_NO_SAMPLES = 0x1,
-		ITS_NO_TRANSFOMATIONS = 0x2,
-		ITS_CALCULATION_DONE = 0x4
+		ITS_NO_SAMPLES = 1,
+		ITS_NO_TRANSFOMATIONS = 2,
+		ITS_TRANSFORM_DONE = 4,
+		ITS_MODEL_DONE = 8
 	};
 
 	class InputTransformation {

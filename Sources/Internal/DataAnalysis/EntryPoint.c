@@ -27,14 +27,14 @@ extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, 
 
 	size_t transformationCount = ( *( pInputParametes->FuncNames ) )->dimSizes[0];
 
-	Buffer<FunctionHeader> transformationHeaders;
+	Buffer<TransformationHeader> transformationHeaders;
 	transformationHeaders.Allocate( transformationCount );
 	GetTransformationHeaders( transformationCount, *pInputParametes->FuncNames, transformationHeaders.Ptr() );
 
 	GetFunctionParameters( *pInputParametes->FuncParAdresses, *pInputParametes->ParamNumbers, transformationHeaders );
 	
 	for ( size_t i = 0; i < transformationHeaders.Length(); i++ ) {
-		transform.AddFunction( transformationHeaders[i] );
+		transform.AddTransformation( transformationHeaders[i] );
 	}
 
 	Buffer<MeasurementSample> output;

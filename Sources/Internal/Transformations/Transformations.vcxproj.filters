@@ -22,7 +22,6 @@
     <ClInclude Include="InputTransformation.h">
       <Filter>DataTransformations</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="InputParser.h" />
   </ItemGroup>
   <ItemGroup>

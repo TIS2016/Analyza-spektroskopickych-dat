@@ -3,13 +3,13 @@
 
 namespace DataAnalysis { namespace InputOutput {
 
-	inline void GetTransformationName( __in LStrHandle *pName, __out FunctionHeader *pHeader ) {
+	inline void GetTransformationName( __in LStrHandle *pName, __out TransformationHeader *pHeader ) {
 		LStrToStr( **pName, pHeader->name );
 		LTrim( pHeader->name );
 		RTrim( pHeader->name );
 	}
 
-	inline void SplitSubfunctions( __in string &subFunctString, __out FunctionHeader *pHeader ) {
+	inline void SplitSubfunctions( __in string &subFunctString, __out TransformationHeader *pHeader ) {
 		vector<string> subFunctions;
 		Split( subFunctString, '@', subFunctions );
 
@@ -18,7 +18,7 @@ namespace DataAnalysis { namespace InputOutput {
 		memcpy( pHeader->subFunctions.Ptr(), subFunctions.data(), subFunctions.size() * sizeof( string ) ); // TODO: Add set method to Buffer
 	}
 
-	inline void GetTransformationSubfunctions( __in LStrHandle *pString, __out FunctionHeader *pHeader ) {
+	inline void GetTransformationSubfunctions( __in LStrHandle *pString, __out TransformationHeader *pHeader ) {
 		string tmp;
 		LStrToStr( **pString, tmp );
 		LTrim( tmp );
@@ -27,7 +27,7 @@ namespace DataAnalysis { namespace InputOutput {
 		SplitSubfunctions( tmp, pHeader );
 	}
 
-	void GetTransformationHeaders( __in size_t count, __in_ecount( count ) TD2 *pSrcStruct, __out_ecount( count ) FunctionHeader *pDst ) {
+	void GetTransformationHeaders( __in size_t count, __in_ecount( count ) TD2 *pSrcStruct, __out_ecount( count ) TransformationHeader *pDst ) {
 		LStrHandle *pSrc = pSrcStruct->String;
 
 		for ( size_t i = 0; i < count; i++ ) {
@@ -40,7 +40,7 @@ namespace DataAnalysis { namespace InputOutput {
 		}
 	}
 
-	void GetFunctionParameters( __in TD4 *pParameterIndexes, __in TD3 *pParameters, __inout Buffer<FunctionHeader> &headers ) {
+	void GetFunctionParameters( __in TD4 *pParameterIndexes, __in TD3 *pParameters, __inout Buffer<TransformationHeader> &headers ) {
 		size_t transformParamAddressSpace = pParameterIndexes->dimSizes[1] * pParameterIndexes->dimSizes[2];
 		size_t subFunctionParamAddressSpace = pParameterIndexes->dimSizes[2];
 
@@ -49,7 +49,7 @@ namespace DataAnalysis { namespace InputOutput {
 		int *pInedxes = pParameterIndexes->Numeric;
 
 		for ( size_t transformI = 0; transformI < transformtionCount; transformI++ ) {
-			FunctionHeader &transform = headers[transformI];
+			TransformationHeader &transform = headers[transformI];
 			size_t subFunctionCount = transform.subFunctions.Length();
 
 			int *pIx = pInedxes;
