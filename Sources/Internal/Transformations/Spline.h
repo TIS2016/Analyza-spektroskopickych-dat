@@ -1,14 +1,17 @@
 #pragma once
 
 #include "TransformationsLibPrivate.h"
+
 namespace DataAnalysis { namespace Transformations {
 
-#pragma push_macro( "SPL_INF" )
-#ifdef INF
-	#undef INF
+#pragma push_macro( "SPL_LIMITS" )
+#ifdef min
+	#undef min
 #endif
 
-#define INF 1.79769e+308
+#ifdef max
+	#undef max
+#endif
 
 	template <class BaseType = double> class HermiteCubicSpline : public IFunction<BaseType> {
 	public:
@@ -40,21 +43,24 @@ namespace DataAnalysis { namespace Transformations {
 		}
 
 		/*
-			Sampels the spline at given point
+			Interpolates the spline at given point
+			Should be done only between given control points
 		*/
 		virtual inline void Apply( __in const BaseType &in, __out BaseType &out ) const {
 			Segment *pSegment = GetSegment( in );
-			BaseType xk = pSegment->pCpStart->x;
-			BaseType xk1 = pSegment->pCpEnd->x;
-			BaseType mk = pSegment->pCpStart->t;
-			BaseType mk1 = pSegment->pCpEnd->t;
 
-			BaseType t = ( in - xk ) / ( xk1 - in );
-			BaseType vect[4] = { t, t, t, 1 };
-			BaseType resVect[4] = { 0, 0, 0, 0 };
-			Mat44MulVect4( m_basisFunctions, vect, resVect );
+			BaseType xScale = pSegment->pCpEnd->x - pSegment->pCpStart->x;
+			BaseType inScaled = ( in - pSegment->pCpStart->x ) / xScale;
+			BaseType S[4] = { inScaled*inScaled*inScaled, inScaled*inScaled, inScaled, 1 };
+			BaseType C[4] = {   pSegment->pCpStart->fx,
+								pSegment->pCpEnd->fx,
+								pSegment->pCpStart->t * xScale,
+								pSegment->pCpEnd->t * xScale };
 
-			out = ( resVect[0] * xk ) + ( resVect[1] * (xk1 - xk) * mk ) + ( resVect[2] * xk1 ) + ( resVect[3] * (xk1 - xk) * mk1 );
+			// P = S * h * C
+			BaseType tmp[4] = { 0, 0, 0, 0 };
+			Vect4MulMat44( S, m_basisFunctionsT, tmp );
+			Vect4DotProduct( tmp, C, &out );
 		}
 
 	protected:
@@ -75,11 +81,11 @@ namespace DataAnalysis { namespace Transformations {
 		size_t m_cpCount;
 		Buffer< ControlPoint > m_controlPoints;
 		Buffer< Segment > m_segments;
-
-		BaseType m_basisFunctions[16] = { 2, -3, 0, 1,
-										  1, -2, 1, 0,
-										  -2, 3, 0, 0,
-										  1, -1, 0, 0 };
+		
+		const BaseType m_basisFunctionsT[16] = {  2, -2,  1,  1,
+												 -3,  3, -2, -1,
+												  0,  0,  1,  0,
+												  1,  0,  0,  0 };
 
 	protected:
 
@@ -94,39 +100,40 @@ namespace DataAnalysis { namespace Transformations {
 			m_segmentCount = ptCount + 1;
 		}
 
+		BaseType GetLinearPoint( __in ControlPoint &pt0, __in ControlPoint &pt1, __in const BaseType xIn ) {
+			BaseType k = ( pt1.fx - pt0.fx ) / ( pt1.x - pt0.x );
+			BaseType q = pt1.fx - k * pt1.x;
+			return k*xIn + q;
+		}
+
 		/*
 			Convert input data to interal control points
 			Input data format: [ CP1_X | CP1_Fx | CP2_X | CP2_Fx | .... | CPn_X | CPn_Fx ]
 			
-			Caller is responsible for providing at least 2 control points to the function
+			Caller is responsible for:
+				1) providing at least 2 control points to the function
+				2) providing control points pre-sorted along X axis
+				3) not including 2 control points with the same X value ( will cause problems in differentiation approximation )
 		*/
 		void ConvertToControlPoints( __in const size_t ptCount, __in_ecount( ptCount * 2 ) const BaseType *pVals ) {
-			ControlPoint *pDst = m_controlPoints.Ptr();
-
-			pDst->x = static_cast<BaseType>( -INF );
-			if ( *( pVals + 1 ) < *( pVals + 3 ) ) {
-				pDst->fx = static_cast<BaseType>( -INF );
-			}
-			else {
-				pDst->fx = static_cast<BaseType>( INF );
-			}
-			pDst++;
-			
+			ControlPoint *pDst = m_controlPoints.Ptr() + 1;
+			const BaseType *pSrc = pVals;
 		
 			for ( size_t i = 0; i < ptCount; i++ ) {
-				pDst->x = pVals;
-				pDst->fx = pVals + 1;
-				pVals += 2;
+				pDst->x = *pSrc;
+				pDst->fx = *(pSrc + 1);
+				pSrc += 2;
 				pDst++;
 			}
 
-			pDst->x = static_cast<BaseType>( INF );
-			if ( *( pVals - 3 ) < *( pVals - 1 ) ) {
-				pDst->fx = static_cast<BaseType>( INF );
-			}
-			else {
-				pDst->fx = static_cast<BaseType>( -INF );
-			}
+			// "inf" and "-inf" points are actually first/last CP -/+ 100 times the span of the spline on X axis
+			// they lie on a line connecting first and second CP ( or last and it's predecessor )
+			BaseType xRange = ( *( pVals + 2 * ( ptCount - 1 ) ) ) - ( *pVals );
+			m_controlPoints[0].x = ( *pVals - xRange * 100 );
+			m_controlPoints[0].fx = GetLinearPoint( m_controlPoints[1], m_controlPoints[2], m_controlPoints[0].x );
+
+			m_controlPoints[m_cpCount - 1].x = ( *( pVals + 2 * ( ptCount - 1 ) ) ) + xRange * 100;
+			m_controlPoints[m_cpCount - 1].fx = GetLinearPoint( m_controlPoints[m_cpCount - 3], m_controlPoints[m_cpCount - 2], m_controlPoints[m_cpCount - 1].x );
 		}
 
 
@@ -136,6 +143,7 @@ namespace DataAnalysis { namespace Transformations {
 			for ( size_t i = 0; i < m_segmentCount; i++ ) {
 				pDst->pCpStart = pCpSrc++;
 				pDst->pCpEnd = pCpSrc;
+				pDst++;
 			}
 		}
 
@@ -164,31 +172,33 @@ namespace DataAnalysis { namespace Transformations {
 		}
 
 
-		Segment* GetSegment( __in const BaseType &x ) {
+		Segment* GetSegment( __in const BaseType &x ) const {
 			// do binary search for correct segment
 			size_t begin = 0;
 			size_t end = m_segmentCount;
 			
 			while ( begin < end ) {
-				size_t mid = ( end - begin ) >> 1;
+				size_t mid = begin + ( ( end - begin ) >> 1 );
 
 				Segment *pSegment = m_segments.Ptr() + mid;
 				if ( pSegment->pCpStart->x <= x )
 				{
-					if ( pSegment->pCpEnd->x >= x ) {
+					if ( pSegment->pCpEnd->x > x ) {
 						return pSegment;
 					}
 					else {
-						start = mid + 1;
+						begin = mid + 1;
 					}
 				}
 				else {
 					end = mid;
 				}
  			}
+
+			return ( m_segments.Ptr() + end );
 		}
 	};
 
-#pragma pop_macro("SPL_INF")
+#pragma pop_macro( "SPL_LIMITS" )
 
 } }
