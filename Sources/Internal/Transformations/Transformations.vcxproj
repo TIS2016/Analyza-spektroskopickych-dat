@@ -125,9 +125,13 @@
   <ItemGroup>
     <ClInclude Include="CompositeFunctions.h" />
     <ClInclude Include="DataTransformations.h" />
+    <ClInclude Include="HermitePolynomialProvider.h" />
     <ClInclude Include="InputParser.h" />
     <ClInclude Include="InputTransformation.h" />
+    <ClInclude Include="IRecursivePolynomialProvider.h" />
+    <ClInclude Include="LegendrePolynomialProvider.h" />
     <ClInclude Include="Polynomial.h" />
+    <ClInclude Include="PolynomialTransform.h" />
     <ClInclude Include="Spline.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TransformationsLib.h" />

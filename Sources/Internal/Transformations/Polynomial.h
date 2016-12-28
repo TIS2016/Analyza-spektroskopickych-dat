@@ -1,98 +1,98 @@
 #pragma once
 
-#include "TransformationsLibPrivate.h"
+#include "stdafx.h"
 
 namespace DataAnalysis { namespace Transformations {
 
-	// TODO: redo templates to empty constructor + Initialize methods ( like in Trigonometric.h, Spline.h )
-	//			-> need to know what Legendre and Chebyshev polynomial look like ( their formula, parameters,.. )
-
-	template <class BaseType = double> class Polynomial : public IFunction<BaseType> {	
+	/*
+		Non-compact Array-based Polynomial class
+	*/
+	template <class BaseType = double> class Polynomial {
 	public:
-
-		/* TODO: redo 
-		static shared_ptr<IFunction> GetPolynomial( __in POLYNOMIAL_TYPE type, __in void *pVals ) {
-			switch ( type ) {
-			case PT_BASIC:
-				return shared_ptr<IFunction>( new BasicPolynomial<BaseType>( *static_cast< Buffer<BaseType> * >( pVals ) ) );
-				
-				case: PT_LEGENDRE:
-				return LegendrePolynomial<BaseType> ( type );
-				case: PT_CHEBYSHEV:
-				return ChebyshevPolynomial<BaseType> ( type );
-				
-			default:
-				return nullptr;
-			}
-		}
-		*/
-
-	};
-
-
-	template <class BaseType = double> class BasicPolynomial : public Polynomial<BaseType> {
-	public:
-		BasicPolynomial() { 
-			mType = FT_POLY_BASIC;
+		// -- Construction
+		Polynomial() {
+			m_coefCnt = 0;
 		};
 
-		void Initialize( __in const size_t count, __in_ecount( count ) const BaseType *pParams ) {
-			if ( count > 0 ) {
-				mDegree = count - 1;
-				mConstants.Set( count, pParams );
-				mInitialized = true;
+		Polynomial( __in const size_t deg, __in_ecount(deg + 1) const BaseType *pCoefs ) {
+			m_degree = deg;
+			m_coefCnt = deg + 1;
+			m_coefs.reserve( m_coefCnt );
+			m_coefs.assign( pCoefs, pCoefs + m_coefCnt );
+		};
+
+		Polynomial( initializer_list<BaseType> coefs ) {
+			m_degree = coefs.size() - 1;
+			m_coefCnt = coefs.size();
+			m_coefs.assign( coefs );
+		}
+
+		Polynomial( __in const shared_ptr<Polynomial<BaseType>> spSource ) {
+			m_degree = spSource->m_degree;
+			m_coefCnt = spSource->m_coefCnt;
+			m_coefs = spSource->m_coefs;
+		};
+
+		// -- Modification
+		void SetCoef( __in const uint deg, __in const BaseType coef ) {
+			if ( m_coefCnt <= deg ) {
+				Grow( deg + 1 );
+			}
+
+			m_coefs[deg] = coef;
+		};
+
+		void Multiply( __in const BaseType cnst ) {
+			for ( size_t i = 0; i < m_coefCnt; i++ ) {
+				m_coefs[i] *= cnst;
 			}
 		}
 
-		void Initialize( __in const Buffer<BaseType> &params ) {
-			Initialize( params.Length(), params.Ptr() );
+		void Multiply( __in const BaseType cnst, __in const uint deg ) {
+			Multiply( cnst );
+			m_coefCnt += deg;
+			m_degree += deg;
+			m_coefs.insert( m_coefs.begin(), deg, BaseType(0) );
+		}
+		 
+		void Subtract( __in const shared_ptr<Polynomial<BaseType>> spPoly ) {
+			size_t subLen = min( m_coefCnt, spPoly->m_coefCnt );
+			for ( size_t i = 0; i < subLen; i++ ) {
+				m_coefs[i] -= spPoly->m_coefs[i];
+			}
 		}
 
-		void Initialize( __in const vector<BaseType> &params ) {
-			Initialize( params.size(), params.data() );
+		// -- Usage
+
+		uint GetDegree() const {
+			return m_degree;
 		}
 
-		/** 
-		Implementation for basic polynomial function in form a*n^0 + b*n^1 + c*n^2 + ... + {alpha}*n^mDegree
-		Using: 
-			- mDegree as max degree of polynomial
-			- mValues as {a, b, c, ... } parameters in various polynomial degrees
-		*/
-		virtual void Apply ( __in const BaseType &in, __out BaseType &out ) const {
-			out = mConstants[0];
-			for (size_t exp = 1; exp <= mDegree; exp++) {
-				out += pow(in, exp) * mConstants[exp];
-			} 
-		};
+		BaseType GetFor( __in const BaseType x ) const {
+			BaseType res( 0 );
+			for ( size_t exp = 0; exp < m_coefCnt; exp++ ) {
+				res += m_coefs[exp] * static_cast<BaseType>( pow( x, exp ) );
+			}
+			return res;
+		}
+
 
 	protected:
-		UINT mDegree;
-		Buffer<BaseType> mConstants;
-	};
 
-	template <class BaseType = double> class LegendrePolynomial : public Polynomial<BaseType> {
-	public:
+		vector<BaseType> m_coefs;
+		uint m_degree;
+		size_t m_coefCnt;
 
-		LegendrePolynomial() {
-			mType = FT_POLY_LEGENDRE;
+	protected:
+
+		void Grow( __in const size_t newCoefCnt ) {
+			Buffer<BaseType> tmp;
+			tmp.Set( m_coefs );
+
+			m_coefs.resize( newCoefCnt, BaseType(0) );
+			memcpy( m_coefs.data(), tmp.Ptr(), m_coefCnt * sizeof( BaseType ) );
+			m_coefCnt = newCoefCnt;
 		}
-
-		virtual void Apply( __in const BaseType &in, __out BaseType &out ) const {
-			out = in;
-		};
-
-	};
-
-	template <class BaseType = double> class ChebyshevPolynomial : public Polynomial<BaseType> {
-	public:
-
-		ChebyshevPolynomial() {
-			mType = FT_POLY_CHEBYSHEV;
-		}
-
-		virtual void Apply( __in const BaseType &in, __out BaseType &out ) const {
-			out = in;
-		};
 
 	};
 
