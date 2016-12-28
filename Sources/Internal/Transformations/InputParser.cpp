@@ -9,9 +9,9 @@ void Transformations::ConvertToInternal(TransformationHeader & in, Transformatio
 	out.transformationType = GetInternalFunctionType(in.name, 0);
 	out.functionParameters = in.functValues;
 
-	out.subFunctions.Allocate(in.subFunctions.Length());
+	out.subFunctions.Allocate( in.subFunctions.Length() );
 	for (size_t i = 0; i < in.subFunctions.Length(); i++){
-		out.subFunctions[i] = GetInternalFunctionType(in.subFunctions[i], (int)in.functValues[i][0]);
+		out.subFunctions[i] = GetInternalFunctionType( in.subFunctions[i], static_cast<int>(in.functValues[i][0]) );
 	}
 
 }
