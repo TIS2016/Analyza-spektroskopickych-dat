@@ -77,10 +77,10 @@ namespace DataAnalysis { namespace Transformations {
 
 	protected:
 
-		void InitializeInternal( __in const uint deg ) {
-			mDegree = deg;
-			mConstants.Allocate( deg + 1 );
-			mPolynomials.Allocate( deg + 1 );
+		void InitializeInternal( __in const uint cnstCnt ) {
+			mDegree = cnstCnt - 1;
+			mConstants.Allocate( cnstCnt );
+			mPolynomials.Allocate( cnstCnt );
 		}
 
 	};
@@ -99,7 +99,7 @@ namespace DataAnalysis { namespace Transformations {
 			InitializeInternal( cnstCount );
 			LegendrePolynomialProvider<BaseType> provider;
 
-			for ( uint i = 0; i <= cnstCount; i++ ) {
+			for ( uint i = 0; i < cnstCount; i++ ) {
 				mPolynomials[i] = provider.GetPolynomial( i );
 				mConstants[i] = *pCnsts;
 				pCnsts++;
@@ -124,7 +124,7 @@ namespace DataAnalysis { namespace Transformations {
 			InitializeInternal( cnstCount );
 			HermitePolynomialProvider<BaseType> provider;
 
-			for ( uint i = 0; i <= cnstCount; i++ ) {
+			for ( uint i = 0; i < cnstCount; i++ ) {
 				mPolynomials[i] = provider.GetPolynomial( i );
 				mConstants[i] = *pCnsts;
 				pCnsts++;
