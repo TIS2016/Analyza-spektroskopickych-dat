@@ -26,16 +26,12 @@ namespace DataAnalysis { namespace Utils {
 			m_pItems = nullptr;
 		}
 
-		Buffer( __in size_t count, __in_ecount( count ) T *pSrc ) {
-			if ( SUCCEEDED( Allocate( count ) ) ) {
-				memcpy( m_pItems, pSrc, count * sizeof( T ) );
-			}
+		Buffer( __in const size_t count, __in_ecount( count ) const T *pSrc ) {
+			Set( count, pSrc );
 		}
 
-		Buffer( __in Buffer<T> &copyFrom ) {
-			if ( SUCCEEDED( Allocate( copyFrom.Length() ) ) ) {
-				memcpy( copyFrom.Ptr(), m_pItems, m_size * sizeof( T ) );
-			}
+		Buffer( __in const Buffer<T> &copyFrom ) {
+			Set( copyFrom );
 		}
 	
 		~Buffer () {
@@ -65,10 +61,20 @@ namespace DataAnalysis { namespace Utils {
 			return S_OK;
 		}
 
-		HRESULT Set( __in const size_t count, __in const T *pSrc ) {
+		HRESULT Set( __in const size_t count, __in_ecount(count) const T *pSrc ) {
+			if ( pSrc == nullptr ) {
+				return E_INVALIDARG;
+			}
+			
 			HRESULT hr = Allocate( count );
 			if ( SUCCEEDED( hr ) ) {
-				memcpy( m_pItems, pSrc, count * sizeof( T ) );
+				// for safety reasons, do copy in loop
+				T *pDst = m_pItems;
+				for ( size_t i = 0; i < count; i++ ) {
+					*pDst = *pSrc;
+					pDst++;
+					pSrc++;
+				}
 			}
 			
 			return hr;
