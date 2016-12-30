@@ -21,6 +21,7 @@ using namespace std;
 
 #include "../Utils/UtilsLib.h"
 #include "../DataAnalysis/CommonTypes.h"
+#include "../Utils/MathLib.h"
 
 using namespace DataAnalysis;
 using namespace DataAnalysis::Utils;

@@ -126,6 +126,8 @@
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="DebugLogger.h" />
+    <ClInclude Include="LinAlgebra.h" />
+    <ClInclude Include="MathLib.h" />
     <ClInclude Include="MemoryAllocator.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringUtils.h" />

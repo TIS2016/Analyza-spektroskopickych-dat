@@ -11,7 +11,7 @@ namespace DataAnalysis { namespace Transformations {
 		FT_TRIG_SIN = 0x2000,
 		FT_TRIG_COS = 0x2001,
 
-		FT_SPLINE_CUBIC = 0x3000,
+		FT_SPLINE_CUBIC_HERMITE = 0x3000,
 
 		FT_SUMOP_UNKNOWN = 0x4000,
 		FT_SUMOP_DIV = 0x4001,
