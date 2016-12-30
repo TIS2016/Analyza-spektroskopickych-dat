@@ -2,11 +2,11 @@
 
 namespace DataAnalysis { namespace Transformations {
 	
-	// Type converting functions (LW<->Internal) depend heavily enum's structure
+	// Type converting functions (LW<->Internal) depend heavily on enum's structure
 	enum FUNCTION_TYPE {
 		FT_POLY_BASIC = 0x1000,
 		FT_POLY_LEGENDRE = 0x1001,
-		FT_POLY_CHEBYSHEV = 0x1002,
+		FT_POLY_HERMITE = 0x1002,
 
 		FT_TRIG_SIN = 0x2000,
 		FT_TRIG_COS = 0x2001,
@@ -16,6 +16,8 @@ namespace DataAnalysis { namespace Transformations {
 		FT_SUMOP_UNKNOWN = 0x4000,
 		FT_SUMOP_DIV = 0x4001,
 		FT_SUMOP_MUL = 0x4002,
+
+		FT_CONSTANT = 0x5000,
 
 		FT_TRANSFORM_X = 0x9000,
 		FT_TRANSFORM_Y = 0x9001,

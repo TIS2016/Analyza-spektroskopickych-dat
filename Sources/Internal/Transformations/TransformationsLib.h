@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TransformationsLibPrivate.h"
+#include "ConstantFunction.h"
 #include "PolynomialTransform.h"
 #include "Spline.h"
 #include "Trigonometric.h"
@@ -35,9 +36,12 @@ namespace DataAnalysis { namespace Transformations {
 						1 -> Cos
 			Spline functions: YSpl
 				Types: None
+				Mapped statically
 			Summary operation: YTyp
 				Types:	1 -> Multiplication
 						2 -> Division
+			Constant Offset function: XOff
+				Mapped statically
 			Transformations: XT/YT/BL/PK
 				Mapped statically
 	*/
@@ -52,11 +56,14 @@ namespace DataAnalysis { namespace Transformations {
 			typeId += 0x2000;
 		}
 		else if ( functName.compare( "YSpl" ) == 0 ) {
-			typeId += 0x3000;
+			typeId = FT_SPLINE_CUBIC_HERMITE;
 		}
 		else if ( functName.compare( "YTyp" ) == 0 ) {
 			typeId += 0x4000;
 		} 
+		else if( functName.compare( "XOff" ) == 0 ) {
+			typeId = FT_CONSTANT;
+		}
 		else if ( functName.compare( "XT" ) == 0 ) {
 			typeId = FT_TRANSFORM_X;
 		}
