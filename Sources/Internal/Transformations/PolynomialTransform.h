@@ -10,7 +10,7 @@ namespace DataAnalysis { namespace Transformations {
 
 	template <class BaseType = double> class IPolynomialTransform : public IFunction<BaseType> {
 	public:
-		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) BaseType *pCnsts ) = 0;
+		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) const BaseType *pCnsts ) = 0;
 
 		void Initialize( __in const Buffer<BaseType> &params ) {
 			Initialize( params.Length(), params.Ptr() );
@@ -27,7 +27,7 @@ namespace DataAnalysis { namespace Transformations {
 			mType = FT_POLY_BASIC;
 		};
 
-		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) BaseType *pCnsts ) {
+		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) const BaseType *pCnsts ) {
 			mSpPolynomial = shared_ptr<Polynomial<BaseType>>( new Polynomial<BaseType>( cnstCount - 1, pCnsts ) );
 			if ( mSpPolynomial != nullptr ) {
 				mInitialized = true;
@@ -95,7 +95,7 @@ namespace DataAnalysis { namespace Transformations {
 			mType = FT_POLY_LEGENDRE;
 		}
 		
-		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) BaseType *pCnsts ) {
+		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) const BaseType *pCnsts ) {
 			InitializeInternal( cnstCount );
 			LegendrePolynomialProvider<BaseType> provider;
 
@@ -117,10 +117,10 @@ namespace DataAnalysis { namespace Transformations {
 	public:
 
 		HermitePolynomialTransform() {
-			mType = FT_POLY_CHEBYSHEV;
+			mType = FT_POLY_HERMITE;
 		}
 
-		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) BaseType *pCnsts ) {
+		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) const BaseType *pCnsts ) {
 			InitializeInternal( cnstCount );
 			HermitePolynomialProvider<BaseType> provider;
 

@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CompositeFunctions.h" />
+    <ClInclude Include="ConstantFunction.h" />
     <ClInclude Include="DataTransformations.h" />
     <ClInclude Include="HermitePolynomialProvider.h" />
     <ClInclude Include="InputParser.h" />
