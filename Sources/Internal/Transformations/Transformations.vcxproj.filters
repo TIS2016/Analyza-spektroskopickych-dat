@@ -7,9 +7,6 @@
       <Filter>DataTransformations</Filter>
     </ClInclude>
     <ClInclude Include="TransformationsLibPrivate.h" />
-    <ClInclude Include="Polynomial.h">
-      <Filter>Functions</Filter>
-    </ClInclude>
     <ClInclude Include="Trigonometric.h">
       <Filter>Functions</Filter>
     </ClInclude>
@@ -22,14 +19,33 @@
     <ClInclude Include="InputTransformation.h">
       <Filter>DataTransformations</Filter>
     </ClInclude>
-    <ClInclude Include="InputParser.h" />
+    <ClInclude Include="InputParser.h">
+      <Filter>InputParsing</Filter>
+    </ClInclude>
+    <ClInclude Include="Polynomial.h">
+      <Filter>Functions\Polynomials</Filter>
+    </ClInclude>
+    <ClInclude Include="IRecursivePolynomialProvider.h">
+      <Filter>Functions\Polynomials</Filter>
+    </ClInclude>
+    <ClInclude Include="HermitePolynomialProvider.h">
+      <Filter>Functions\Polynomials</Filter>
+    </ClInclude>
+    <ClInclude Include="LegendrePolynomialProvider.h">
+      <Filter>Functions\Polynomials</Filter>
+    </ClInclude>
+    <ClInclude Include="PolynomialTransform.h">
+      <Filter>Functions\Polynomials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="InputTransformation.cpp">
       <Filter>DataTransformations</Filter>
     </ClCompile>
-    <ClCompile Include="InputParser.cpp" />
+    <ClCompile Include="InputParser.cpp">
+      <Filter>InputParsing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Functions">
@@ -40,6 +56,9 @@
     </Filter>
     <Filter Include="InputParsing">
       <UniqueIdentifier>{004e9fec-6377-48d2-bd01-a9d18b06f356}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Functions\Polynomials">
+      <UniqueIdentifier>{f102e75c-5efc-4e21-9d74-1cd08577e194}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

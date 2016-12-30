@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TransformationsLibPrivate.h"
-#include "Polynomial.h"
+#include "PolynomialTransform.h"
 #include "Spline.h"
 #include "Trigonometric.h"
 #include "CompositeFunctions.h"
