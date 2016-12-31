@@ -13,7 +13,13 @@ namespace DataAnalysis { namespace Transformations {
   	}
   }
 
-  shared_ptr<IFunction<double>> GetSubFunctionAndInitialize( __in const FUNCTION_TYPE type, __in const size_t paramCount, __in_ecount( paramCount ) const double *pParams, __in_z const char *pFunctName ) {
+  shared_ptr<IFunction<double>> GetSubFunctionAndInitialize( 
+	  __in const FUNCTION_TYPE type, 
+	  __in const size_t paramCount, 
+	  __in_ecount( paramCount ) const double *pParams, 
+	  __in_z const char *pFunctName,
+	  __in const InputTransformation *pCaller = nullptr ) 
+  {
 	  shared_ptr<IFunction<double>> spFunct = nullptr;
 
 	  uint argCount = paramCount - 1;
@@ -37,14 +43,18 @@ namespace DataAnalysis { namespace Transformations {
 	  {
 		  spFunct = shared_ptr<IFunction<double>>( new LegendrePolynomialTransform<double>() );
 		  _ASSERT( argCount > 0 );
-		  spFunct->Initialize<LegendrePolynomialTransform<double>>( argCount, pArgs );
+		  double xMin = pCaller->GetXMin();
+		  double xMax = pCaller->GetXMax();
+		  spFunct->Initialize<LegendrePolynomialTransform<double>>( argCount, pArgs, xMin, xMax );
 		  break;
 	  }
 	  case ( FT_POLY_HERMITE ):
 	  {
 		  spFunct = shared_ptr<IFunction<double>>( new HermitePolynomialTransform<double>() );
 		  _ASSERT( argCount > 0 );
-		  spFunct->Initialize<HermitePolynomialTransform<double>>( argCount, pArgs );
+		  double xMin = pCaller->GetXMin();
+		  double xMax = pCaller->GetXMax();
+		  spFunct->Initialize<HermitePolynomialTransform<double>>( argCount, pArgs, xMin, xMax );
 		  break;
 	  }
 	  case ( FT_TRIG_SIN ):
@@ -81,7 +91,7 @@ namespace DataAnalysis { namespace Transformations {
 	  return spFunct;
   }
 
-  shared_ptr<IFunction<double>> GetSubFunctionAndInitialize( __in const TransformationHeader &info, __in_z const char *pFunctName ) {
+  shared_ptr<IFunction<double>> GetSubFunctionAndInitialize( __in const TransformationHeader &info, __in_z const char *pFunctName, __in const InputTransformation *pCaller = nullptr ) {
 	  shared_ptr<IFunction<double>> spFunct = nullptr;
 
 	  // search for given function in Header
@@ -90,7 +100,7 @@ namespace DataAnalysis { namespace Transformations {
 		  if ( name.compare( pFunctName ) == 0 ) {
 			  // get internal representation of it (a.k.a. enum value)
 			  FUNCTION_TYPE fType = GetInternalFunctionType( name, static_cast<int>( info.functValues[i][0] ) );
-			  spFunct = GetSubFunctionAndInitialize( fType, info.functValues[i].Length(), info.functValues[i].Ptr(), pFunctName );
+			  spFunct = GetSubFunctionAndInitialize( fType, info.functValues[i].Length(), info.functValues[i].Ptr(), pFunctName, pCaller );
 			  break;
 		  }
 	  }
@@ -141,7 +151,7 @@ namespace DataAnalysis { namespace Transformations {
 	  spFunct->Initialize<XTransform<>>( spXOff, spXScl );
   }
 
-  void CreateYTransform( __in const TransformationHeader &info, __inout const shared_ptr<IFunction<MeasurementSample>> spFunct ) {
+  void CreateYTransform( __in const TransformationHeader &info, __inout const shared_ptr<IFunction<MeasurementSample>> spFunct, __in const InputTransformation *pCaller ) {
 	  /*
 		1) get YOff
 		2) get YSpl, YTrg, YPol
@@ -151,7 +161,7 @@ namespace DataAnalysis { namespace Transformations {
 	  */
 
 	  shared_ptr<IFunction<double>> spYOff = GetSubFunctionAndInitialize( info, "YOff" );
-	  shared_ptr<IFunction<double>> spYSpl = GetSubFunctionAndInitialize( info, "YSpl" );
+	  shared_ptr<IFunction<double>> spYSpl = GetSubFunctionAndInitialize( info, "YSpl", pCaller );
 	  shared_ptr<IFunction<double>> spYTrg = GetSubFunctionAndInitialize( info, "YTrg" );
 	  shared_ptr<IFunction<double>> spYPol = GetSubFunctionAndInitialize( info, "YPol" );
 
@@ -179,7 +189,7 @@ namespace DataAnalysis { namespace Transformations {
   }
 
 
-  shared_ptr<IFunction<MeasurementSample>> GetTransformation( __in const TransformationHeader &transformInfo ) {
+  shared_ptr<IFunction<MeasurementSample>> GetTransformation( __in const TransformationHeader &transformInfo, __in const InputTransformation *pCaller ) {
 	  shared_ptr<IFunction<MeasurementSample>> spFunct = nullptr;
 	  
 	  if ( transformInfo.name.compare( "XT" ) == 0 ) {
@@ -188,7 +198,7 @@ namespace DataAnalysis { namespace Transformations {
 	  }
 	  else if ( transformInfo.name.compare( "YT" ) == 0 ) {
 		  spFunct = shared_ptr<IFunction<MeasurementSample>>( new YTransform<>() );
-		  CreateYTransform( transformInfo, spFunct );
+		  CreateYTransform( transformInfo, spFunct, pCaller );
 	  }
 	  else if ( transformInfo.name.compare( "BL" ) == 0 ) {
 		  spFunct = shared_ptr<IFunction<MeasurementSample>>( new BaselineTransform<>() );

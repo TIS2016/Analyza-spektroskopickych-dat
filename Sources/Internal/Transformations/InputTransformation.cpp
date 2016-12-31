@@ -7,11 +7,13 @@ namespace DataAnalysis { namespace Transformations {
 	void InputTransformation::AddSample( __in const MeasurementSample &sample ) {
 		mInputSamples.push_back( sample );
 		UnsetFlag( ITS_NO_SAMPLES | ITS_MODEL_DONE | ITS_TRANSFORM_DONE );
+		SetBoundValues();
 	};
 
 	void InputTransformation::AddSample( __in const double x, __in const double y, __in const double uncertainty ) {
 		mInputSamples.push_back( MeasurementSample( x, y, uncertainty ) );
 		UnsetFlag( ITS_NO_SAMPLES | ITS_MODEL_DONE | ITS_TRANSFORM_DONE );
+		SetBoundValues();
 	}
 
 	void InputTransformation::AddTransformation( __in const shared_ptr< IFunction<MeasurementSample> > spTransform ) {
@@ -36,7 +38,7 @@ namespace DataAnalysis { namespace Transformations {
 	};
 
 	void InputTransformation::AddTransformation( __in const TransformationHeader &transform ) {
-		shared_ptr<IFunction<MeasurementSample>> spTransform = GetTransformation( transform );
+		shared_ptr<IFunction<MeasurementSample>> spTransform = GetTransformation( transform, this );
 		if ( spTransform ) {
 			AddTransformation( spTransform );
 		}
@@ -107,6 +109,16 @@ namespace DataAnalysis { namespace Transformations {
 
 	inline void InputTransformation::UnsetFlag( __in const int flag ) {
 		mState &= ~flag;
+	}
+
+	inline void InputTransformation::SetBoundValues() {
+		MeasurementSample &lastSample = mInputSamples.back();
+		if ( lastSample.X > mXMax ) {
+			mXMax = lastSample.X;
+		}
+		if ( lastSample.X < mXMin ) {
+			mXMin = lastSample.X;
+		}
 	}
 
 } }

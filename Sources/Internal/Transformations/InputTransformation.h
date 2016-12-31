@@ -16,6 +16,8 @@ namespace DataAnalysis { namespace Transformations {
 	public:
 		InputTransformation() {
 			mState = ITS_NO_SAMPLES | ITS_NO_TRANSFOMATIONS | ITS_NO_MODEL;
+			mXMax = numeric_limits<double>::lowest();
+			mXMin = numeric_limits<double>::max();
 		};
 
 		void AddSample( __in const MeasurementSample &sample );
@@ -31,12 +33,18 @@ namespace DataAnalysis { namespace Transformations {
 		void CalculateModel( __in const size_t count, __inout_ecount( count ) MeasurementSample *pOutput );
 		void CalculateModel( __inout Buffer<MeasurementSample> &output );
 
+		inline double GetXMin() const { return mXMin; };
+		inline double GetXMax() const { return mXMax; };
+
 	protected:
 
 		int mState;
 
 		vector< MeasurementSample > mInputSamples;
 		vector< MeasurementSample > mOutputSamples;
+
+		double mXMax;
+		double mXMin;
 
 		vector< shared_ptr< IFunction<MeasurementSample> > > mTranformations;
 		vector< shared_ptr< IFunction<MeasurementSample> > > mModelTransformation;
@@ -48,6 +56,8 @@ namespace DataAnalysis { namespace Transformations {
 		inline void SetFlag( __in const int flag );
 
 		inline void UnsetFlag( __in const int flag );
+
+		inline void SetBoundValues();
 
 	};
 } }
