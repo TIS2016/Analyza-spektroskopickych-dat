@@ -163,6 +163,21 @@ namespace DataAnalysis { namespace Transformations {
 	  spFunct->Initialize<YTransform<double>>( spYOff, spYSummary );
   }
 
+  void CreateBaselineTransform( __in const TransformationHeader &info, __inout const shared_ptr<IFunction<MeasurementSample>> spFunct ) {
+	  /*
+		1) get BPol, BTrg, BSpl
+		2) initialize BaselineTransform with them
+	  */
+
+	  shared_ptr<IFunction<double>> spBPol = GetSubFunctionAndInitialize( info, "BPol" );
+	  shared_ptr<IFunction<double>> spBTrg = GetSubFunctionAndInitialize( info, "BTrg" );
+	  shared_ptr<IFunction<double>> spBSpl = GetSubFunctionAndInitialize( info, "BSpl" );
+
+	  _ASSERT_EXPR( spBPol && spBTrg && spBSpl, L"Nullptr in BaselineTransform sub-functions" );
+
+	  spFunct->Initialize<BaselineTransform<double>>( spBPol, spBTrg, spBSpl );
+  }
+
 
   shared_ptr<IFunction<MeasurementSample>> GetTransformation( __in const TransformationHeader &transformInfo ) {
 	  shared_ptr<IFunction<MeasurementSample>> spFunct = nullptr;
@@ -177,7 +192,7 @@ namespace DataAnalysis { namespace Transformations {
 	  }
 	  else if ( transformInfo.name.compare( "BL" ) == 0 ) {
 		  spFunct = shared_ptr<IFunction<MeasurementSample>>( new BaselineTransform<>() );
-		  // CreateBaselineTransform( transformInfo, spFunct );
+		  CreateBaselineTransform( transformInfo, spFunct );
 	  }
 	  else if ( transformInfo.name.compare( "PK" ) == 0 ) {
 		  // we'll see about this 0:)

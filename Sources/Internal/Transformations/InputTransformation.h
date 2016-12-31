@@ -4,17 +4,6 @@
 
 namespace DataAnalysis { namespace Transformations {
 
-	/*	TODO:
-			[unneccessary bullshit]
-			1) think of a better name than FunctionHeader
-			2) think of moving FunctionHeader somewhere else ( where it makes more sense, Lib maybe? )
-			3) think of better names for FunctionHeader members
-			[important stuff]
-			4) adapt ImputTransformation to new template-based Functions
-			5) add input parsing ( eg. FunctionHeader -> IFunction(s) )
-				- right now, there are a few hard-coded methods, generic methods/class would be nice
-	*/
-
 	enum INPUT_TRANSFORMATION_STATE {
 		ITS_NO_SAMPLES = 1,
 		ITS_NO_TRANSFOMATIONS = 2,
