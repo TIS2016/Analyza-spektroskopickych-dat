@@ -6,12 +6,12 @@ namespace DataAnalysis { namespace Transformations {
 
 	void InputTransformation::AddSample( __in const MeasurementSample &sample ) {
 		mInputSamples.push_back( sample );
-		UnsetFlag( ITS_NO_SAMPLES );
+		UnsetFlag( ITS_NO_SAMPLES | ITS_MODEL_DONE | ITS_TRANSFORM_DONE );
 	};
 
 	void InputTransformation::AddSample( __in const double x, __in const double y, __in const double uncertainty ) {
 		mInputSamples.push_back( MeasurementSample( x, y, uncertainty ) );
-		UnsetFlag( ITS_NO_SAMPLES );
+		UnsetFlag( ITS_NO_SAMPLES | ITS_MODEL_DONE | ITS_TRANSFORM_DONE );
 	}
 
 	void InputTransformation::AddTransformation( __in const shared_ptr< IFunction<MeasurementSample> > spTransform ) {
@@ -22,12 +22,12 @@ namespace DataAnalysis { namespace Transformations {
 		case( FT_MODEL_BASELINE ):
 		case( FT_MODEL_PEAKS ):
 			mModelTransformation.push_back( spTransform );
-			UnsetFlag( ITS_NO_MODEL );
+			UnsetFlag( ITS_NO_MODEL | ITS_MODEL_DONE );
 			break;
 		case( FT_TRANSFORM_X ):
 		case( FT_TRANSFORM_Y ):
 			mTranformations.push_back( spTransform );
-			UnsetFlag( ITS_NO_TRANSFOMATIONS );
+			UnsetFlag( ITS_NO_TRANSFOMATIONS | ITS_TRANSFORM_DONE | ITS_MODEL_DONE );
 			break;
 		default:
 			break;
@@ -72,6 +72,29 @@ namespace DataAnalysis { namespace Transformations {
 		mOutputSamples.clear();
 		mOutputSamples.reserve( sampleCount );
 		CalculateTransformations( sampleCount, mOutputSamples.data() );
+	}
+
+	void InputTransformation::CalculateModel( __in const size_t count, __inout_ecount( count ) MeasurementSample *pOutput ) {
+		size_t outputSize = mOutputSamples.size();
+		if ( FlagIsSet( ITS_NO_MODEL | ITS_NO_SAMPLES ) || !FlagIsSet( ITS_TRANSFORM_DONE ) || count < outputSize ) {
+			return;
+		}
+
+		for ( auto modelIt = mModelTransformation.begin(); modelIt != mModelTransformation.end(); modelIt++ ) {
+			shared_ptr<IFunction<MeasurementSample>> spModelTransform = *modelIt;
+			spModelTransform->ApplyOnData( outputSize, mOutputSamples.data(), pOutput );
+		}
+
+		SetFlag( ITS_MODEL_DONE );
+	}
+
+	void InputTransformation::CalculateModel( __inout Buffer<MeasurementSample> &output ) {
+		size_t outputSize = mOutputSamples.size();
+		if ( output.Length() < outputSize ) {
+			output.Allocate( outputSize );
+		}
+
+		CalculateModel( outputSize, output.Ptr() );
 	}
 
 	inline bool InputTransformation::FlagIsSet( __in const int flag ) const {

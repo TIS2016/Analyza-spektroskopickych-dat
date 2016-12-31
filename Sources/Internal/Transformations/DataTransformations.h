@@ -102,10 +102,10 @@ namespace DataAnalysis { namespace Transformations {
 
 		virtual inline void Apply ( __in const MeasurementSample &in, __out MeasurementSample &out ) const {
 			BaseType poly(0), trig(0);
-			mSpSpline->Apply ( in.X, out.X );
+			mSpSpline->Apply ( in.X, out.Model );
 			mSpPolynomial->Apply ( in.X, poly );
 			mSpTrigonometric->Apply ( in.X, trig );
-			out.X += poly + trig;
+			out.Model += poly + trig;
 		}
 
 	protected:

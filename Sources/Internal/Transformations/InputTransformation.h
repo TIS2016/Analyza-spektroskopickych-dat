@@ -28,6 +28,9 @@ namespace DataAnalysis { namespace Transformations {
 		void CalculateTransformations( __out Buffer<MeasurementSample> &output );
 		void CalculateTransformations();
 
+		void CalculateModel( __in const size_t count, __inout_ecount( count ) MeasurementSample *pOutput );
+		void CalculateModel( __inout Buffer<MeasurementSample> &output );
+
 	protected:
 
 		int mState;

@@ -39,6 +39,7 @@ extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, 
 
 	Buffer<MeasurementSample> output;
 	transform.CalculateTransformations( output );
+	transform.CalculateModel( output );
 
 	ConvertOutputData( output.Length(), output.Ptr(), pOutputData );
 	
