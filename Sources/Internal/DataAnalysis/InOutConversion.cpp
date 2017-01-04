@@ -15,7 +15,7 @@ namespace DataAnalysis { namespace InputOutput {
 
 		pHeader->subFunctions.Allocate( subFunctions.size() );
 		pHeader->functValues.Allocate( subFunctions.size() );
-		memcpy( pHeader->subFunctions.Ptr(), subFunctions.data(), subFunctions.size() * sizeof( string ) ); // TODO: Add set method to Buffer
+		pHeader->subFunctions.Set( subFunctions );
 	}
 
 	inline void GetTransformationSubfunctions( __in LStrHandle *pString, __out TransformationHeader *pHeader ) {

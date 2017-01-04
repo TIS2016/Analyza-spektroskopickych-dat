@@ -2,7 +2,7 @@
 
 namespace DataAnalysis { namespace Utils {
 
-	void LStrToStr ( __in LStrPtr pIn, __out std::string &outStr );
+	void LStrToStr ( __in const LStrPtr pIn, __out std::string &outStr );
 
 	inline void RTrim( __inout std::string &str, __in const char* pToTrim = " \t\n\v\f\r" ) {
 		size_t delPos = str.find_last_not_of( pToTrim ) + 1;
