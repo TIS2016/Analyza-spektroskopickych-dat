@@ -114,7 +114,7 @@ namespace DataAnalysis { namespace Transformations {
 	  // search for given function in Header
 	  for ( size_t i = 0; i < info.subFunctions.Length(); i++ ) {
 		  string &name = info.subFunctions[i];
-		  if ( name.compare( "YTrg" ) == 0 ) {
+		  if ( name.compare( "YTyp" ) == 0 ) {
 			  // get internal representation of it (a.k.a. enum value)
 			  FUNCTION_TYPE fType = GetInternalFunctionType( name, static_cast<int>( info.functValues[i][0] ) );
 
@@ -161,9 +161,9 @@ namespace DataAnalysis { namespace Transformations {
 	  */
 
 	  shared_ptr<IFunction<double>> spYOff = GetSubFunctionAndInitialize( info, "YOff" );
-	  shared_ptr<IFunction<double>> spYSpl = GetSubFunctionAndInitialize( info, "YSpl", pCaller );
+	  shared_ptr<IFunction<double>> spYSpl = GetSubFunctionAndInitialize( info, "YSpl" );
 	  shared_ptr<IFunction<double>> spYTrg = GetSubFunctionAndInitialize( info, "YTrg" );
-	  shared_ptr<IFunction<double>> spYPol = GetSubFunctionAndInitialize( info, "YPol" );
+	  shared_ptr<IFunction<double>> spYPol = GetSubFunctionAndInitialize( info, "YPol", pCaller );
 
 	  shared_ptr<IFunction<MeasurementSample>> spYSummary = GetSummaryFunction( info );
 
