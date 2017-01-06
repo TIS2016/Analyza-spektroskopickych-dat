@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include "EntryPoint.h"
 #include "InOutConversion.h"
+#include <chrono>
 
 using namespace DataAnalysis::InputOutput;
 
 extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, TDFast *DataOUT_F, TD10 *Error) {
 	UNREFERENCED_PARAMETER( Error );
+
+	chrono::high_resolution_clock::time_point execStart = chrono::high_resolution_clock::now();
 
 	TD1 *pInputParametes = DataPARin;
 	TD7 *pInputData = DataIN;
@@ -32,7 +35,10 @@ extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, 
 
 	ConvertOutputData( output.Length(), output.Ptr(), pOutputData );
 	
-	return 343;
+	chrono::high_resolution_clock::time_point execEnd = chrono::high_resolution_clock::now();
+	auto elapsed = chrono::duration_cast<chrono::milliseconds>( execEnd - execStart ).count();
+
+	return static_cast<int32_t>( elapsed );
 }
 
 extern "C" _declspec(dllexport) int32_t fdata_complete(TD1 *DataPARin, TD7 *DataIN, TDComplete *DataOUT_C, TD10 *Error) {
