@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="ExternalLib.h" />
+    <ClInclude Include="cintools\extcode.h">
+      <Filter>LabView</Filter>
+    </ClInclude>
+    <ClInclude Include="cintools\fundtypes.h">
+      <Filter>LabView</Filter>
+    </ClInclude>
+    <ClInclude Include="cintools\hosttype.h">
+      <Filter>LabView</Filter>
+    </ClInclude>
+    <ClInclude Include="cintools\ILVDataInterface.h">
+      <Filter>LabView</Filter>
+    </ClInclude>
+    <ClInclude Include="cintools\ILVTypeInterface.h">
+      <Filter>LabView</Filter>
+    </ClInclude>
+    <ClInclude Include="cintools\lv_epilog.h">
+      <Filter>LabView</Filter>
+    </ClInclude>
+    <ClInclude Include="cintools\lv_prolog.h">
+      <Filter>LabView</Filter>
+    </ClInclude>
+    <ClInclude Include="cintools\platdefines.h">
+      <Filter>LabView</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="LabView">
+      <UniqueIdentifier>{42d967c1-dd08-4dd5-ac47-825d4caa0446}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
