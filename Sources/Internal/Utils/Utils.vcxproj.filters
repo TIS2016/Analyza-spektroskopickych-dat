@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Buffer.h" />
+    <ClInclude Include="MemoryAllocator.h" />
+    <ClInclude Include="UtilsLib.h" />
+    <ClInclude Include="StringUtils.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugLogger.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="LinAlgebra.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MathLib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="DebugLogger.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="StringUtils.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="String">
+      <UniqueIdentifier>{99935fe6-8ad5-4577-a000-6fd85c9ec40f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{70c46cdf-50c1-4a2b-8009-1b69e4abdfa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{3a80678a-4342-473f-b038-64a983c8955d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

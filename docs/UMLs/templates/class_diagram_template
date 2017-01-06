@@ -1,0 +1,33 @@
+@startuml
+
+note "This part was created by PC" as N1
+
+LabViewProgram ... N1
+
+class LabViewProgram {
+  +loadDll()
+}
+
+
+package "Code_peaks_2015.cpp" #DDDDDD {
+  class InputParser {
+    +parameters
+    -transformParameterTable()
+  }
+  LabViewProgram -- InputParser
+
+  InputParser --|> FunctionDecider
+}
+
+package "linesAdv.cpp" {
+
+  ProfileManager <|--- FunctionDecider
+
+  class ProfileManager {
+    +hartmanTranProfile()
+    +voitProfile()
+    +gausProfile()
+  }
+}
+
+@enduml

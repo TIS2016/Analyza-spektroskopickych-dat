@@ -1,0 +1,79 @@
+@startuml
+
+actor PeterCermak as PC
+boundary LabViewUI as LUI
+control LabViewEngine as LVE
+boundary InputOutputParser as IOP
+control DopplerModelEngine as DOP
+control LorentzModelEngine as LOR
+control VoigtModelEngine as VOI
+control HartmannTranEngine as HTP
+entity ResultModel as RM
+
+
+PC --> LUI: fills in input parameters
+activate LUI
+
+LUI --> LVE: tells the engine to create\n a model with given parameters
+activate LVE
+
+LVE --> IOP: calls DLL library\n to compute model data
+activate IOP
+
+alt DLL parameters were valid
+
+	opt Doppler model is required
+
+		IOP --> DOP: passes parsed data \nfor engine to calculate
+		activate DOP
+		
+		DOP <--> RM: calculates model data
+
+		IOP <-- DOP: passes the model to parser
+		deactivate DOP
+
+	else Lorentz model is required
+
+		IOP --> LOR: passes parsed data \nfor engine to calculate
+		activate LOR
+		
+		LOR <--> RM: calculates model data
+
+		IOP <-- LOR: passes the model to parser
+		deactivate LOR
+
+	else Voigt model is required
+
+		IOP --> VOI: passes parsed data \nfor engine to calculate
+		activate VOI
+		
+		VOI <--> RM: calculates model data
+
+		IOP <-- VOI: passes the model to parser
+		deactivate VOI
+
+	else HTP model is required
+
+		IOP --> HTP: passes parsed data \nfor engine to calculate
+		activate HTP
+		
+		HTP <--> RM: calculates model data
+
+		IOP <-- HTP: passes the model to parser
+		deactivate HTP
+
+	end
+
+	LVE <-- IOP: parses the model and\n sends it to LabVIEW
+	deactivate IOP
+
+	LUI <-- LVE: makes sence of recieved data
+	deactivate LVE
+
+	PC <-- LUI: display results to user
+	deactivate LUI
+else parameters were not recognized
+	IOP --> LVE: sends back an error code
+	LVE --> LUI: displays the error to the user
+end
+@enduml

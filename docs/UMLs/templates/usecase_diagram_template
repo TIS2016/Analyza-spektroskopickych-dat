@@ -1,0 +1,28 @@
+@startuml
+
+left to right direction
+
+:Physicist: as P
+
+rectangle "Usage of DLL library from LabView" {
+
+(Loads DLL library into LabView) as LOAD
+
+(Calls DLL from LabView to compute a model) as CALL
+
+(Calls to compute Doppler model) as DOP
+(Calls to compute Voigt model) as VOI
+(Calls to compute Lorentz model) as LOR
+(Calls to compute Hartmann-Tran model) as HTP
+
+P --> LOAD
+P --> CALL
+
+DOP .> CALL : extend
+VOI .> CALL : extend
+LOR .> CALL : extend
+HTP .> CALL : extend
+
+}
+
+@enduml
