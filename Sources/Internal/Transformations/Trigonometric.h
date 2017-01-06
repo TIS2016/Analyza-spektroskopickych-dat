@@ -37,19 +37,6 @@ namespace DataAnalysis { namespace Transformations {
 			}
 		}
 
-		/* TODO: redo
-		static shared_ptr<IFunction> GetFunction( __in TRIGONOMETRIC_TYPE type, __in void *pVals ) {
-			switch ( type ) {
-			case TT_SIN:
-				return shared_ptr<IFunction>( new SinFunction<BaseType>( *static_cast<Buffer<BaseType> *>( pVals ) ) );
-			case TT_COS:
-				return shared_ptr<IFunction>( new CosFunction<BaseType>( *static_cast<Buffer<BaseType> *>( pVals ) ) );
-			default:
-				return nullptr;
-			}
-		}
-		*/
-
 	protected:
 		BaseType mA, mB, mC;
 	};

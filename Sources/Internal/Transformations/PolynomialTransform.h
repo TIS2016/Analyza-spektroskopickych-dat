@@ -9,16 +9,7 @@
 namespace DataAnalysis { namespace Transformations {
 
 	template <class BaseType = double> class IPolynomialTransform : public IFunction<BaseType> {
-	public:
-		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) BaseType *pCnsts ) = 0;
-
-		void Initialize( __in const Buffer<BaseType> &params ) {
-			Initialize( params.Length(), params.Ptr() );
-		}
-
-		void Initialize( __in const vector<BaseType> &params ) {
-			Initialize( params.size(), params.data() );
-		}
+		// dummy class for now, maybe one day, something will appear here
 	};
 
 	template <class BaseType = double> class BasicPolynomialTransform : public IPolynomialTransform<BaseType> {
@@ -27,7 +18,7 @@ namespace DataAnalysis { namespace Transformations {
 			mType = FT_POLY_BASIC;
 		};
 
-		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) BaseType *pCnsts ) {
+		void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) const BaseType *pCnsts ) {
 			mSpPolynomial = shared_ptr<Polynomial<BaseType>>( new Polynomial<BaseType>( cnstCount - 1, pCnsts ) );
 			if ( mSpPolynomial != nullptr ) {
 				mInitialized = true;
@@ -62,11 +53,15 @@ namespace DataAnalysis { namespace Transformations {
 
 	public:
 
+		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) const BaseType *pCnsts, __in const BaseType &sclMin, __in const BaseType &sclMax ) = 0;
+
 		virtual void Apply( __in const BaseType &in, __out BaseType &out ) const {
 			out = BaseType( 0 );
+			BaseType inTransformed = GetValueLocal( in );
 			for ( uint exp = 0; exp <= mDegree; exp++ ) {
-				out += mConstants[exp] * mPolynomials[exp]->GetFor( in );
+				out += mConstants[exp] * mPolynomials[exp]->GetFor( inTransformed );
 			}
+			// ?? rescale value back or not ?? who knows ??
 		}
 
 	protected:
@@ -75,12 +70,38 @@ namespace DataAnalysis { namespace Transformations {
 		Buffer< BaseType > mConstants;
 		uint mDegree;
 
+		BaseType scaleMin;
+		BaseType scaleMax;
+		BaseType scaleInv;
+		BaseType scale;
+
 	protected:
 
 		void InitializeInternal( __in const uint cnstCnt ) {
 			mDegree = cnstCnt - 1;
 			mConstants.Allocate( cnstCnt );
 			mPolynomials.Allocate( cnstCnt );
+		}
+
+		void InitializeScale( __in const BaseType &sclMin, __in const BaseType &sclMax ) {
+			scaleMin = sclMin;
+			scaleMax = sclMax;
+			scale = sclMax - sclMin;
+			scaleInv = 1 / scale;
+		}
+
+		/*
+			Rescales given value to fit into interval [-1, 1]
+		*/
+		BaseType GetValueLocal( __in const BaseType &value ) const {
+			return ( ( ( value - scaleMin ) * 2 ) * scaleInv ) - 1;
+		}
+
+		/*
+			Rascales value back from [-1, 1]
+		*/
+		BaseType GetValueGlobal( __in const BaseType &value ) const {
+			return ( ( ( value + 1 ) / 2 ) * scale ) + scaleMin;
 		}
 
 	};
@@ -95,8 +116,9 @@ namespace DataAnalysis { namespace Transformations {
 			mType = FT_POLY_LEGENDRE;
 		}
 		
-		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) BaseType *pCnsts ) {
+		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) const BaseType *pCnsts, __in const BaseType &sclMin, __in const BaseType &sclMax ) {
 			InitializeInternal( cnstCount );
+			InitializeScale( sclMin, sclMax );
 			LegendrePolynomialProvider<BaseType> provider;
 
 			for ( uint i = 0; i < cnstCount; i++ ) {
@@ -117,11 +139,12 @@ namespace DataAnalysis { namespace Transformations {
 	public:
 
 		HermitePolynomialTransform() {
-			mType = FT_POLY_CHEBYSHEV;
+			mType = FT_POLY_HERMITE;
 		}
 
-		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) BaseType *pCnsts ) {
+		virtual void Initialize( __in const uint cnstCount, __in_ecount( cnstCount ) const BaseType *pCnsts, __in const BaseType &sclMin, __in const BaseType &sclMax ) {
 			InitializeInternal( cnstCount );
+			InitializeScale( sclMin, sclMax );
 			HermitePolynomialProvider<BaseType> provider;
 
 			for ( uint i = 0; i < cnstCount; i++ ) {

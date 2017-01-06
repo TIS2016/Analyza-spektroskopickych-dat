@@ -37,6 +37,9 @@
     <ClInclude Include="PolynomialTransform.h">
       <Filter>Functions\Polynomials</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantFunction.h">
+      <Filter>Functions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />

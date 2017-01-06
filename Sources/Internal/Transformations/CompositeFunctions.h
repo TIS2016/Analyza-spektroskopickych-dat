@@ -20,25 +20,6 @@ namespace DataAnalysis { namespace Transformations {
 			}
 		}
 
-		/* TODO: redo
-		static shared_ptr< IFunction<MeasurementSample> > GetSummaryOperationFunction(
-			__in SUMMARY_OPERATION_TYPE type,
-			__in const shared_ptr< IFunction<double> > spPoly,
-			__in const shared_ptr< IFunction<double> > spTrig,
-			__in const shared_ptr< IFunction<double> > spSpline )
-		{
-			switch ( type )
-			{
-			case SO_DIV:
-				return shared_ptr< IFunction<MeasurementSample> >( new SummaryDivision( spPoly, spTrig, spSpline ) );
-			case SO_MUL:
-				return shared_ptr< IFunction<MeasurementSample> >( new SummaryMultiplication( spPoly, spTrig, spSpline ) );
-			default:
-				return nullptr;
-			}
-		}
-		*/
-
 	protected:
 
 		shared_ptr<IFunction<BaseType>> mSpPolynomial;
@@ -59,7 +40,7 @@ namespace DataAnalysis { namespace Transformations {
 
 	};
 
-	template <class SampleClass = MeasurementSample, class BaseType = double> class SummaryDivision : public SummaryOperation<SampleClass, BaseType> {
+	template <class BaseType = double, class SampleClass = MeasurementSample> class SummaryDivision : public SummaryOperation<BaseType, SampleClass> {
 	public:
 		SummaryDivision() {
 			mType = FT_SUMOP_DIV;
@@ -70,7 +51,7 @@ namespace DataAnalysis { namespace Transformations {
 		}
 	};
 
-	template <class SampleClass = MeasurementSample, class BaseType = double> class SummaryMultiplication : public SummaryOperation<SampleClass, BaseType> {
+	template <class BaseType = double, class SampleClass = MeasurementSample> class SummaryMultiplication : public SummaryOperation<BaseType, SampleClass> {
 	public:
 		SummaryMultiplication() {
 			mType = FT_SUMOP_MUL;

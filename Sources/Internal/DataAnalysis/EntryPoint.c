@@ -2,17 +2,6 @@
 #include "EntryPoint.h"
 #include "InOutConversion.h"
 
-/* BUG LIST:
-	1) DataTransformations/InputTransformation -> YTransform -> spPolynomial is nullptr
-		-> possible bug in function parameter parsing
-
-
-	!!!!!
-		Whole project is diabled for building, right now it wouldn't compile.
-		I'm working on it :)
-	!!!!!
-*/
-
 using namespace DataAnalysis::InputOutput;
 
 extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, TDFast *DataOUT_F, TD10 *Error) {
@@ -39,6 +28,7 @@ extern "C" _declspec(dllexport) int32_t fdata_fast(TD1 *DataPARin, TD7 *DataIN, 
 
 	Buffer<MeasurementSample> output;
 	transform.CalculateTransformations( output );
+	transform.CalculateModel( output );
 
 	ConvertOutputData( output.Length(), output.Ptr(), pOutputData );
 	

@@ -5,13 +5,11 @@
 
 namespace DataAnalysis { namespace Transformations {
 
-	// TODO: redo to empty constructor + Initialize methods template
-
 	/*
 		Transformation function for data on X axis
-		Xout = Scale(Xin) + Offset
+		Xout = Scale(Xin) + Offset(Xin)
 			- Scale: can be any function, on basic type, which implements IFunction interface
-			- Offset: any number, shifts X axis by constant
+			- Offset: any function on basic type implementing IFunction interface
 	*/
 	template <class BaseType = double> class XTransform : public IFunction<MeasurementSample> {
 	public:
@@ -19,23 +17,27 @@ namespace DataAnalysis { namespace Transformations {
 		XTransform () {
 			mType = FT_TRANSFORM_X;
 		};
-		
-		void Initialize( __in const BaseType off, __in const shared_ptr< IFunction<BaseType> > spScaleFunction ) {
-			if ( spScaleFunction != nullptr ) {
-				mOffset = off;
-				mSpScaleFunction = spS :DcaleFunction;
+
+		void Initialize( __in const shared_ptr<IFunction<BaseType>> spOffsetFunction, __in const shared_ptr< IFunction<BaseType> > spScaleFunction ) {
+			if ( spOffsetFunction != nullptr && spScaleFunction != nullptr ) {
+				mSpOffsetFunction = spOffsetFunction;
+				mSpScaleFunction = spScaleFunction;
 				mInitialized = true;
 			}
 		}
 
 		virtual inline void Apply ( __in const MeasurementSample &in, __out MeasurementSample &out ) const {
+			BaseType offset( 0 );
+			mSpOffsetFunction->Apply( in.X, offset );
 			mSpScaleFunction->Apply ( in.X, out.X );
-			out.X += mOffset;
+			out.X += offset;
 		}
 
 	protected:
-		BaseType mOffset;
+
+		shared_ptr< IFunction<BaseType> > mSpOffsetFunction; // will be constant function in our case
 		shared_ptr< IFunction<BaseType> > mSpScaleFunction;
+
 	};
 
 
@@ -80,7 +82,7 @@ namespace DataAnalysis { namespace Transformations {
 		Input: Samples on which XTransform has been already applied ( eg. XOut )
 	*/
 	template <class BaseType = double> class BaselineTransform : public IFunction<MeasurementSample> {
-
+	public:
 		BaselineTransform() {
 			mType = FT_MODEL_BASELINE;
 		};
@@ -99,11 +101,11 @@ namespace DataAnalysis { namespace Transformations {
 		}
 
 		virtual inline void Apply ( __in const MeasurementSample &in, __out MeasurementSample &out ) const {
-			double poly, trig = 0;
-			mSpSpline->Apply ( in.X, out.X );
+			BaseType poly(0), trig(0);
+			mSpSpline->Apply ( in.X, out.Model );
 			mSpPolynomial->Apply ( in.X, poly );
 			mSpTrigonometric->Apply ( in.X, trig );
-			out.X += poly + trig;
+			out.Model += poly + trig;
 		}
 
 	protected:
